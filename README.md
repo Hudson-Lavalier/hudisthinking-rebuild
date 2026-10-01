@@ -32,9 +32,9 @@ Visit `http://127.0.0.1:8000` in your browser.
 You don't need to write code to post essays or upload files. Everything is managed through the Django Admin dashboard:
 
 1. Navigate to: `http://127.0.0.1:8000/admin/`
-2. Default local credentials:
-   - **Username**: `admin`
-   - **Password**: `adminpass123` *(change this in production)*
+2. Administrator login:
+   - **Username**: `hud`
+   - **Password**: *(your configured master password)*
 3. From the dashboard:
    - **Philosophy Archive**: Add philosophical arguments, essays, blog posts, or fragments. Supports full Markdown formatting (headings, code blocks, quotes, lists).
    - **Projects & Downloads**: Add software works, games, and prototypes. Upload your `.exe` or `.zip` files directly (<100MB), specify system requirements, version numbers, and platform tags.
