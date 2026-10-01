@@ -660,7 +660,7 @@ main.site-content {
   margin: 1.5rem 0 2.5rem;
 }
 
-/* Philosophical Apparatus: Gothic Accordions */
+/* Philosophical Apparatus: Gothic Accordions (and all prose details) */
 .philosophical-apparatus {
   margin: 3.5rem 0 2rem;
   display: flex;
@@ -668,22 +668,27 @@ main.site-content {
   gap: 1.25rem;
 }
 
-.gothic-accordion {
+.gothic-accordion,
+.markdown-prose details {
   border: 1px solid var(--border-strong);
   background-color: var(--bg-surface);
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  margin: 1.5rem 0;
 }
 
-.gothic-accordion:hover {
+.gothic-accordion:hover,
+.markdown-prose details:hover {
   border-color: #666666;
 }
 
-.gothic-accordion[open] {
+.gothic-accordion[open],
+.markdown-prose details[open] {
   border-color: #ffffff;
   background-color: var(--bg-surface-elevated);
 }
 
-.gothic-accordion-summary {
+.gothic-accordion-summary,
+.markdown-prose details > summary {
   padding: 1rem 1.25rem;
   font-family: inherit;
   font-size: 0.95rem;
@@ -698,8 +703,29 @@ main.site-content {
   list-style: none; /* Hide default native disclosure triangle */
 }
 
-.gothic-accordion-summary::-webkit-details-marker {
+.gothic-accordion-summary::-webkit-details-marker,
+.markdown-prose details > summary::-webkit-details-marker {
   display: none;
+}
+
+/* Hide raw Elementor SVGs inside summary */
+.markdown-prose details > summary svg {
+  display: none !important;
+}
+
+/* Prefix indicator for markdown-prose details summaries that don't have .accordion-marker */
+.markdown-prose details > summary:not(:has(.accordion-marker))::before {
+  content: "[+] ";
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: monospace;
+  transition: color 0.2s ease;
+  margin-right: 0.25rem;
+}
+
+.markdown-prose details[open] > summary:not(:has(.accordion-marker))::before {
+  content: "[-] ";
+  color: #ffffff;
 }
 
 .accordion-marker {
@@ -733,12 +759,24 @@ main.site-content {
   font-weight: normal;
 }
 
-.gothic-accordion-content {
-  padding: 1.25rem 1.5rem;
-  border-top: 1px solid var(--border-subtle);
+.gothic-accordion-content,
+.markdown-prose details > :not(summary) {
+  padding: 1rem 1.5rem 1.25rem;
   color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.65;
+}
+
+.markdown-prose details > summary + * {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.25rem;
+}
+
+/* Broken image suppression */
+img:not([src]),
+img[src=""],
+img[src="#"] {
+  display: none !important;
 }
 
 /* Academic Citation Box */

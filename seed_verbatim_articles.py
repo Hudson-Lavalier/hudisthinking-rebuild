@@ -35,12 +35,20 @@ tag_theology, _ = PhilosophyTag.objects.get_or_create(slug='philosophy-of-religi
 tag_freewill, _ = PhilosophyTag.objects.get_or_create(slug='free-will', defaults={'name': 'Free Will'})
 tag_ethics, _ = PhilosophyTag.objects.get_or_create(slug='ethics', defaults={'name': 'Ethics'})
 
+def sanitize_content(raw_html):
+    # Strip broken WordPress image embeds and theme placeholders
+    c = re.sub(r'<img\b[^>]*(?:hudisthinking\.com/wp-content|/projects/Images4Bat|elementor/assets)[^>]*>', '', raw_html, flags=re.IGNORECASE)
+    c = re.sub(r'<img\b[^>]*\bsrc=[\'"]\s*[\'"][^>]*>', '', c, flags=re.IGNORECASE)
+    # Normalize whitespace-only lines
+    c = re.sub(r'^[ \t]+$', '', c, flags=re.MULTILINE)
+    # Strip leading tabs/spaces before HTML tags so markdown processes them as HTML
+    c = re.sub(r'^[ \t]+(<(?:details|summary|p|h[1-6]|div|a|style|ul|ol|li|table|thead|tbody|tr|th|td|blockquote|section|header|footer|span|strong|em|b|i)\b)', r'\1', c, flags=re.MULTILINE | re.IGNORECASE)
+    return c.strip()
+
 # 1. THE ARGUMENT FROM SPIRITUAL NON-CONVERGENCE
 art_snc = data['the-argument-from-spiritual-non-convergence']
 raw_snc = art_snc['content']
-
-# Clean encoding artifact  -> ' or - where appropriate, but preserve exact text
-clean_snc = raw_snc
+clean_snc = sanitize_content(raw_snc)
 
 # Extract citation string from footer if present
 cite_apa_snc = 'Amaral, H. J. (2026). The Argument from Spiritual Non-Convergence (Version 1.0). HudIsThinking LLC. https://hudisthinking.com/philosophy/the-argument-from-spiritual-non-convergence/'
@@ -66,7 +74,7 @@ print(f"Seeded: {arg1.title} (Created={created}, Len={len(arg1.content)})")
 # 2. WHY GOD IS ULTIMATELY RESPONSIBLE FOR SIN'S OCCURRENCE
 art_sin = data['why-god-is-ultimately-responsible-for-sins-occurrence']
 raw_sin = art_sin['content']
-clean_sin = raw_sin
+clean_sin = sanitize_content(raw_sin)
 
 cite_apa_sin = "Amaral, H. J. (2026). Why God Is Ultimately Responsible for Sin's Occurrence: Divine Responsibility for the Occurrence of Sin (Version 1.0). HudIsThinking LLC. https://hudisthinking.com/philosophy/why-god-is-ultimately-responsible-for-sins-occurrence/"
 cite_mla_sin = 'Amaral, Hudson J. "Why God Is Ultimately Responsible for Sin\'s Occurrence." Hud Is Thinking, Version 1.0, 11 June 2026, https://hudisthinking.com/philosophy/why-god-is-ultimately-responsible-for-sins-occurrence/.'
@@ -91,7 +99,7 @@ print(f"Seeded: {arg2.title} (Created={created}, Len={len(arg2.content)})")
 # 3. ARCHITECTURAL ESTABLISHISM - A TAKE ON PREDETERMINISM
 art_arch = data['architectural-establishism-a-take-on-predeterminism']
 raw_arch = art_arch['content']
-clean_arch = raw_arch
+clean_arch = sanitize_content(raw_arch)
 
 cite_apa_arch = "Amaral, H. J. (2025). Architectural Establishism: A Take on Predeterminism (Version 1.0). HudIsThinking LLC. https://hudisthinking.com/philosophy/architectural-establishism-a-take-on-predeterminism/"
 cite_mla_arch = 'Amaral, Hudson J. "Architectural Establishism - A Take on Predeterminism." Hud is Thinking, Version 1.0, 31 Dec. 2025, https://hudisthinking.com/philosophy/architectural-establishism-a-take-on-predeterminism/.'
@@ -116,7 +124,7 @@ print(f"Seeded: {arg3.title} (Created={created}, Len={len(arg3.content)})")
 # 4. DESKTOP BUDDY COMPANION (Project)
 art_desk = data['desktop-buddy-companion']
 raw_desk = art_desk['content']
-clean_desk = raw_desk
+clean_desk = sanitize_content(raw_desk)
 
 proj1, created = Project.objects.update_or_create(
     slug='desktop-buddy-companion',
@@ -139,7 +147,7 @@ print(f"Seeded: {proj1.title} (Created={created}, Len={len(proj1.description)})"
 # 5. TERMINAL TRADER GAME (Project)
 art_tt = data['terminal-trader-game']
 raw_tt = art_tt['content']
-clean_tt = raw_tt
+clean_tt = sanitize_content(raw_tt)
 
 proj2, created = Project.objects.update_or_create(
     slug='terminal-trader-game',

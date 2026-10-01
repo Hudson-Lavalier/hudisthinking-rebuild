@@ -52,4 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial execution
   initPageFeatures();
+
+  // Gracefully suppress broken image frames
+  window.addEventListener('error', (e) => {
+    if (e.target && e.target.tagName === 'IMG') {
+      e.target.style.display = 'none';
+    }
+  }, true);
 });
