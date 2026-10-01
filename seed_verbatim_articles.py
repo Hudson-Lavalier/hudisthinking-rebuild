@@ -39,6 +39,13 @@ def sanitize_content(raw_html):
     # Strip broken WordPress image embeds and theme placeholders
     c = re.sub(r'<img\b[^>]*(?:hudisthinking\.com/wp-content|/projects/Images4Bat|elementor/assets)[^>]*>', '', raw_html, flags=re.IGNORECASE)
     c = re.sub(r'<img\b[^>]*\bsrc=[\'"]\s*[\'"][^>]*>', '', c, flags=re.IGNORECASE)
+
+    # If article contains accordions (<details>), Elementor appended an unstyled duplicate dump of all accordion contents after the last </details> tag.
+    # Truncate at the last </details> tag to eliminate the duplicate text dump.
+    last_details = list(re.finditer(r'</details>', c, re.IGNORECASE))
+    if last_details:
+        c = c[:last_details[-1].end()]
+
     # Normalize whitespace-only lines
     c = re.sub(r'^[ \t]+$', '', c, flags=re.MULTILINE)
     # Strip leading tabs/spaces before HTML tags so markdown processes them as HTML

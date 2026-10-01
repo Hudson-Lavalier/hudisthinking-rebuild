@@ -17,9 +17,12 @@ def markdown_filter(text):
         text,
         flags=re.IGNORECASE
     )
-    clean_text = re.sub(r'<img\b[^>]*\bsrc=[\'"]\s*[\'"][^>]*>', '', clean_text, flags=re.IGNORECASE)
+    # 2. If legacy WordPress content contains accordions, strip Elementor's duplicate text dump following the last </details> tag
+    last_details = list(re.finditer(r'</details>', clean_text, re.IGNORECASE))
+    if last_details:
+        clean_text = clean_text[:last_details[-1].end()]
 
-    # 2. Normalize whitespace-only lines so empty tabs don't trigger phantom blocks
+    # 3. Normalize whitespace-only lines so empty tabs don't trigger phantom blocks
     clean_text = re.sub(r'^[ \t]+$', '', clean_text, flags=re.MULTILINE)
 
     # 3. Strip leading indentation before HTML tags so markdown treats them as HTML rather than code blocks
