@@ -57,24 +57,24 @@
   </header>
 
   <!-- Top Toggleable Download Box -->
-  {% if project.download_file and project.show_download_button %}
+  {% if project.get_download_link and project.show_download_button %}
     <div class="download-box top-download-bar">
       <div class="download-info">
-        <strong class="download-title">{{ project.filename }}</strong>
+        <strong class="download-title">{{ project.filename|default:project.title }}</strong>
         <span class="download-specs">
-          Platform: {{ project.platform }} | Size: {{ project.file_size_display|default:"Ready" }}
+          Platform: {{ project.platform }}{% if project.file_size_display %} | Size: {{ project.file_size_display }}{% endif %}
           {% if project.system_requirements %}
             <br>Requirements: {{ project.system_requirements }}
           {% endif %}
         </span>
       </div>
       <div>
-        <a href="{{ project.download_file.url }}" class="btn-download" download>
+        <a href="{{ project.get_download_link }}" class="btn-download" {% if project.download_file %}download{% else %}target="_blank" rel="noopener noreferrer"{% endif %}>
           Download Executable
         </a>
       </div>
     </div>
-  {% elif not project.download_file and project.show_download_button %}
+  {% elif not project.get_download_link and project.show_download_button %}
     <div class="monochrome-card" style="margin: 1.5rem 0;">
       <p class="card-body">Downloadable binary package currently pending release.</p>
     </div>

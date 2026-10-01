@@ -25,8 +25,8 @@ class ProjectAdmin(admin.ModelAdmin):
             'description': 'Screenshot, artwork, or user interface preview.'
         }),
         ('Downloadable Binary / Executable', {
-            'fields': ('download_file', 'show_download_button', 'version', 'platform', 'system_requirements'),
-            'description': 'Attach your packaged executable (.exe, .zip). Toggle the download button visibility above.'
+            'fields': ('download_file', 'download_url', 'show_download_button', 'version', 'platform', 'system_requirements'),
+            'description': 'Upload your packaged executable (.exe, .zip) or enter an external download link. Toggle the download button visibility above.'
         }),
         ('External Links', {
             'fields': ('github_url', 'itch_url'),

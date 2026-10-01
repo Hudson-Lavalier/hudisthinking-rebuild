@@ -9,8 +9,10 @@ __pycache__/
 .env
 .env.local
 
-# Media uploads (user downloads, games)
-media/
+# Media uploads (allow downloads folder for game binaries)
+media/*
+!media/downloads/
+!media/downloads/**
 
 # Static collection
 staticfiles/

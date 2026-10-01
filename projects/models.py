@@ -54,7 +54,12 @@ class Project(models.Model):
         upload_to='downloads/',
         blank=True,
         null=True,
-        help_text="Upload packaged executable or archive (.exe, .zip, etc.)"
+        help_text="Upload packaged executable or archive (.exe, .zip, etc.) directly."
+    )
+    download_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Optional direct or external download URL (e.g. Google Drive, itch.io, GitHub release, CDN). Used if no file is uploaded directly."
     )
     show_download_button = models.BooleanField(
         default=True,
@@ -117,3 +122,12 @@ class Project(models.Model):
         if self.download_file:
             return os.path.basename(self.download_file.name)
         return None
+
+    @property
+    def get_download_link(self):
+        if self.download_file:
+            return self.download_file.url
+        if self.download_url:
+            return self.download_url
+        return None
+
