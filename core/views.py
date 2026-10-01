@@ -17,6 +17,9 @@ def about(request):
         'about': about_obj,
     })
 
+def connect(request):
+    return render(request, 'connect.html')
+
 def custom_page(request, slug):
     page = get_object_or_404(CustomPage, slug=slug, is_published=True)
     return render(request, 'custom_page.html', {

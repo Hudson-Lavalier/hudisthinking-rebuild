@@ -82,8 +82,10 @@
         {% else %}
           <a href="{% url 'philosophy:list' %}" class="nav-link {% if request.resolver_match.app_name == 'philosophy' %}active{% endif %}">Philosophy</a>
           <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">Projects</a>
+          <a href="{% url 'core:connect' %}" class="nav-link {% if request.resolver_match.url_name == 'connect' %}active{% endif %}">Connect</a>
           <a href="{% url 'core:about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
         {% endif %}
+        <a href="https://connect.hudisthinking.com/" target="_blank" rel="noopener noreferrer" class="btn-header-connect" title="Visit HudIsThinking Connect">[CONNECT &rarr;]</a>
       </nav>
     </div>
   </header>
@@ -108,8 +110,10 @@
           <a href="{% url 'core:home' %}">Home</a>
           <a href="{% url 'philosophy:list' %}">Philosophy</a>
           <a href="{% url 'projects:list' %}">Projects</a>
+          <a href="{% url 'core:connect' %}">Connect</a>
           <a href="{% url 'core:about' %}">About</a>
         {% endif %}
+        <a href="https://connect.hudisthinking.com/" target="_blank" rel="noopener noreferrer">[Connect &rarr;]</a>
         <a href="{% url 'admin:index' %}" data-no-swup>[Admin]</a>
       </div>
     </div>
