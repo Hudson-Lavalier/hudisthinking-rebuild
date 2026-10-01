@@ -48,10 +48,16 @@
         </div>
 
         <h2 class="card-title">
-          <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
+          <a href="{{ proj.get_absolute_url }}"
+             data-live-model="projects.project"
+             data-live-id="{{ proj.id }}"
+             data-live-field="title">{{ proj.title }}</a>
         </h2>
 
-        <p class="card-body">{{ proj.tagline }}</p>
+        <p class="card-body"
+           data-live-model="projects.project"
+           data-live-id="{{ proj.id }}"
+           data-live-field="tagline">{{ proj.tagline }}</p>
 
         <div style="margin-top: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
           <a href="{{ proj.get_absolute_url }}" class="btn-secondary">Overview & Details</a>

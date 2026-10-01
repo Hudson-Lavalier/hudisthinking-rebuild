@@ -38,6 +38,7 @@
 
   function setEditing(enable) {
     state.isEditing = enable;
+    localStorage.setItem('hit_edit_mode', enable ? 'true' : 'false');
     const { toggleBtn } = getHudElements();
     const editableElements = Array.from(document.querySelectorAll('[data-live-field]'));
 
@@ -133,85 +134,10 @@
     const { hud, toggleBtn, saveBtn, mediaBtn, mediaDrawer, mediaCloseBtn } = getHudElements();
     if (!hud) return;
 
-    const editableElements = Array.from(document.querySelectorAll('[data-live-field]'));
-
-    if (editableElements.length === 0) {
-      if (toggleBtn) {
-        toggleBtn.disabled = true;
-        toggleBtn.textContent = '[NO EDITABLE REGIONS]';
-      }
-      updateStatus('synced', 'READ ONLY');
-      return;
-    }
-
-    if (toggleBtn) {
-      toggleBtn.disabled = false;
-      toggleBtn.textContent = state.isEditing ? '[EDIT MODE: ON]' : '[EDIT MODE: OFF]';
-    }
-
-    editableElements.forEach((el) => {
-      const field = el.getAttribute('data-live-field');
-      const model = el.getAttribute('data-live-model');
-      const id = el.getAttribute('data-live-id');
-
-      if (state.isEditing) {
-        el.setAttribute('contenteditable', 'true');
-        el.setAttribute('spellcheck', 'false');
-      }
-
-      el.addEventListener('focus', () => {
-        state.activeElement = el;
-      });
-
-      el.addEventListener('input', () => {
-        const isMarkdown = el.getAttribute('data-live-format') === 'markdown';
-        const currentVal = isMarkdown ? el.innerText : el.innerHTML;
-        const key = `${model}:${id}:${field}`;
-
-        state.modifiedFields[key] = {
-          model: model,
-          id: id,
-          field: field,
-          value: currentVal,
-        };
-        state.isDirty = true;
-        updateStatus('dirty', 'UNSAVED CHANGES');
-        if (saveBtn) saveBtn.style.display = 'inline-flex';
-      });
-    });
-
-    if (toggleBtn && !toggleBtn._hasLiveEditorListener) {
-      toggleBtn.addEventListener('click', () => {
-        setEditing(!state.isEditing);
-      });
-      toggleBtn._hasLiveEditorListener = true;
-    }
-
-    if (saveBtn && !saveBtn._hasLiveEditorListener) {
-      saveBtn.addEventListener('click', saveChanges);
-      saveBtn._hasLiveEditorListener = true;
-    }
-
-    if (mediaBtn && mediaDrawer && !mediaBtn._hasLiveEditorListener) {
-      mediaBtn.addEventListener('click', async () => {
-        mediaDrawer.classList.toggle('is-open');
-        if (mediaDrawer.classList.contains('is-open')) {
-          await loadMediaLibrary();
-        }
-      });
-      mediaBtn._hasLiveEditorListener = true;
-    }
-
-    if (mediaCloseBtn && mediaDrawer && !mediaCloseBtn._hasLiveEditorListener) {
-      mediaCloseBtn.addEventListener('click', () => {
-        mediaDrawer.classList.remove('is-open');
-      });
-      mediaCloseBtn._hasLiveEditorListener = true;
-    }
-
     const collapseBtn = document.getElementById('hit-hud-collapse-btn');
     const expandBtn = document.getElementById('hit-hud-expand-btn');
 
+    // 1. Collapse & Expand Controls (Always wired up)
     if (collapseBtn && !collapseBtn._hasLiveEditorListener) {
       collapseBtn.addEventListener('click', () => {
         hud.classList.add('is-collapsed');
@@ -232,14 +158,127 @@
       expandBtn._hasLiveEditorListener = true;
     }
 
-    // Check saved collapse state
+    // Apply saved collapse state
     if (localStorage.getItem('hit_hud_minimized') === 'true') {
       hud.classList.add('is-collapsed');
       document.body.classList.remove('hit-staff-active');
       if (expandBtn) expandBtn.style.display = 'block';
     } else {
+      hud.classList.remove('is-collapsed');
       document.body.classList.add('hit-staff-active');
+      if (expandBtn) expandBtn.style.display = 'none';
     }
+
+    // 2. Media Drawer Controls (Always wired up)
+    if (mediaBtn && mediaDrawer && !mediaBtn._hasLiveEditorListener) {
+      mediaBtn.addEventListener('click', async () => {
+        mediaDrawer.classList.toggle('is-open');
+        if (mediaDrawer.classList.contains('is-open')) {
+          await loadMediaLibrary();
+        }
+      });
+      mediaBtn._hasLiveEditorListener = true;
+    }
+
+    if (mediaCloseBtn && mediaDrawer && !mediaCloseBtn._hasLiveEditorListener) {
+      mediaCloseBtn.addEventListener('click', () => {
+        mediaDrawer.classList.remove('is-open');
+      });
+      mediaCloseBtn._hasLiveEditorListener = true;
+    }
+
+    // 3. Save Button (Always wired up)
+    if (saveBtn && !saveBtn._hasLiveEditorListener) {
+      saveBtn.addEventListener('click', saveChanges);
+      saveBtn._hasLiveEditorListener = true;
+    }
+
+    // 4. Toggle Button (Always wired up)
+    if (toggleBtn && !toggleBtn._hasLiveEditorListener) {
+      toggleBtn.addEventListener('click', () => {
+        setEditing(!state.isEditing);
+      });
+      toggleBtn._hasLiveEditorListener = true;
+    }
+
+    // 5. Restore saved edit mode
+    const savedEditMode = localStorage.getItem('hit_edit_mode') === 'true';
+    state.isEditing = savedEditMode;
+
+    // 6. Handle Editable Regions
+    const editableElements = Array.from(document.querySelectorAll('[data-live-field]'));
+
+    if (editableElements.length === 0) {
+      if (toggleBtn) {
+        toggleBtn.disabled = true;
+        toggleBtn.textContent = '[NO EDITABLE REGIONS]';
+        toggleBtn.classList.remove('btn-active-toggle');
+      }
+      updateStatus('synced', 'STANDBY');
+      return;
+    }
+
+    if (toggleBtn) {
+      toggleBtn.disabled = false;
+      if (state.isEditing) {
+        toggleBtn.classList.add('btn-active-toggle');
+        toggleBtn.textContent = '[EDIT MODE: ON]';
+      } else {
+        toggleBtn.classList.remove('btn-active-toggle');
+        toggleBtn.textContent = '[EDIT MODE: OFF]';
+      }
+    }
+
+    if (state.isEditing) {
+      document.body.classList.add('hit-editing-active');
+      updateStatus(state.isDirty ? 'dirty' : 'synced', state.isDirty ? 'UNSAVED CHANGES' : 'EDITING ACTIVE');
+    } else {
+      document.body.classList.remove('hit-editing-active');
+      updateStatus(state.isDirty ? 'dirty' : 'synced', state.isDirty ? 'UNSAVED CHANGES' : 'STANDBY');
+    }
+
+    editableElements.forEach((el) => {
+      const field = el.getAttribute('data-live-field');
+      const model = el.getAttribute('data-live-model');
+      const id = el.getAttribute('data-live-id');
+
+      if (state.isEditing) {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'false');
+      } else {
+        el.removeAttribute('contenteditable');
+      }
+
+      if (!el._hasLiveEditorListener) {
+        el.addEventListener('click', (e) => {
+          if (state.isEditing && (el.tagName === 'A' || el.closest('a'))) {
+            e.preventDefault();
+          }
+        });
+
+        el.addEventListener('focus', () => {
+          state.activeElement = el;
+        });
+
+        el.addEventListener('input', () => {
+          const isMarkdown = el.getAttribute('data-live-format') === 'markdown';
+          const currentVal = isMarkdown ? el.innerText : el.innerHTML;
+          const key = `${model}:${id}:${field}`;
+
+          state.modifiedFields[key] = {
+            model: model,
+            id: id,
+            field: field,
+            value: currentVal,
+          };
+          state.isDirty = true;
+          updateStatus('dirty', 'UNSAVED CHANGES');
+          if (saveBtn) saveBtn.style.display = 'inline-flex';
+        });
+
+        el._hasLiveEditorListener = true;
+      }
+    });
   }
 
   async function loadMediaLibrary() {

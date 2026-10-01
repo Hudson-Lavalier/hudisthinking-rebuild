@@ -61,11 +61,17 @@
         </div>
 
         <h2 class="card-title">
-          <a href="{{ arg.get_absolute_url }}">{{ arg.title }}</a>
+          <a href="{{ arg.get_absolute_url }}"
+             data-live-model="philosophy.argument"
+             data-live-id="{{ arg.id }}"
+             data-live-field="title">{{ arg.title }}</a>
         </h2>
 
         {% if arg.thesis %}
-          <p class="card-body">{{ arg.thesis }}</p>
+          <p class="card-body"
+             data-live-model="philosophy.argument"
+             data-live-id="{{ arg.id }}"
+             data-live-field="thesis">{{ arg.thesis }}</p>
         {% endif %}
 
         {% if arg.tags.all %}
