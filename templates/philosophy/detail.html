@@ -58,7 +58,10 @@
       <span>{{ argument.estimated_read_time }}</span>
     </div>
 
-    <h1 class="reader-title typewriter-entrance">{{ argument.title }}</h1>
+    <h1 class="reader-title typewriter-entrance"
+        data-live-model="philosophy.argument"
+        data-live-id="{{ argument.id }}"
+        data-live-field="title">{{ argument.title }}</h1>
 
     {% if argument.featured_image and argument.show_featured_image %}
       <div class="featured-media-frame">
@@ -69,7 +72,9 @@
     {% if argument.thesis %}
       <div class="thesis-callout">
         <strong>Core Premise / Thesis:</strong>
-        <p>{{ argument.thesis }}</p>
+        <p data-live-model="philosophy.argument"
+           data-live-id="{{ argument.id }}"
+           data-live-field="thesis">{{ argument.thesis }}</p>
       </div>
     {% endif %}
 
@@ -82,7 +87,12 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose">
+  <div class="markdown-prose"
+       data-live-model="philosophy.argument"
+       data-live-id="{{ argument.id }}"
+       data-live-field="content"
+       data-live-format="markdown"
+       data-live-raw="{{ argument.content|escape }}">
     {{ argument.content|markdown }}
   </div>
 

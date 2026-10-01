@@ -11,7 +11,10 @@
 {% block content %}
 <article class="reader-container">
   <header class="reader-header">
-    <h1 class="reader-title">{{ page.title }}</h1>
+    <h1 class="reader-title"
+        data-live-model="core.custompage"
+        data-live-id="{{ page.id }}"
+        data-live-field="title">{{ page.title }}</h1>
     {% if page.featured_image and page.show_featured_image %}
       <div class="featured-media-frame">
         <img src="{{ page.featured_image.url }}" alt="{{ page.title }}" class="featured-media-img">
@@ -19,7 +22,12 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose">
+  <div class="markdown-prose"
+       data-live-model="core.custompage"
+       data-live-id="{{ page.id }}"
+       data-live-field="content"
+       data-live-format="markdown"
+       data-live-raw="{{ page.content|escape }}">
     {{ page.content|markdown }}
   </div>
 
