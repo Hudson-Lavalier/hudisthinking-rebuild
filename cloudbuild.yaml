@@ -13,11 +13,11 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'hudisthinking-web'
+      - 'hudisthinking-repo'
       - '--image'
       - 'gcr.io/$PROJECT_ID/hudisthinking:$COMMIT_SHA'
       - '--region'
-      - 'us-central1'
+      - 'us-east1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'

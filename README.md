@@ -82,5 +82,5 @@ The repository includes a ready-to-use `Dockerfile` and `cloudbuild.yaml`:
 
 ### Manual Cloud Run Deploy:
 ```bash
-gcloud run deploy hudisthinking-web --source . --region us-central1 --allow-unauthenticated
+gcloud run deploy hudisthinking-repo --source . --region us-east1 --allow-unauthenticated
 ```
