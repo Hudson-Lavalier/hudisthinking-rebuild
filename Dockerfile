@@ -18,10 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Run collectstatic for whitenoise production asset serving, migrate, and seed verbatim articles
+# Run collectstatic for whitenoise production asset serving, migrate, seed articles and admin
 RUN python manage.py collectstatic --noinput && \
     python manage.py migrate --noinput && \
-    python seed_verbatim_articles.py
+    python seed_verbatim_articles.py && \
+    python ensure_admin.py
 
 EXPOSE 8080
 
