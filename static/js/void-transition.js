@@ -45,6 +45,62 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
+  // --- Shadow Confetti Falling Particle Burst ---
+  function spawnShadowConfetti() {
+    const confettiContainer = document.getElementById('shadow-confetti');
+    if (!confettiContainer) return;
+
+    // Clear any previous confetti elements
+    confettiContainer.innerHTML = '';
+
+    const particleCount = 42;
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'shadow-flake';
+
+      // Random starting coordinates around the vortex center and screen
+      const startX = 50 + (Math.random() - 0.5) * 60; // 20% to 80% screen width
+      const startY = 35 + (Math.random() - 0.5) * 40; // 15% to 55% screen height
+      
+      // Fall trajectory offsets
+      const driftX = (Math.random() - 0.5) * 220; // -110px to +110px horizontal drift
+      const fallY = 160 + Math.random() * 320;     // falls 160px - 480px down
+      const rotation = (Math.random() - 0.5) * 720;
+      
+      // Particle physical dimensions (irregular dark shards / ash confetti)
+      const sizeW = 3 + Math.random() * 8;
+      const sizeH = 4 + Math.random() * 12;
+      const opacity = 0.55 + Math.random() * 0.45;
+      const animDuration = 0.35 + Math.random() * 0.35; // 0.35s - 0.7s
+      const delay = Math.random() * 0.08;
+
+      p.style.cssText = `
+        left: ${startX}vw;
+        top: ${startY}vh;
+        width: ${sizeW}px;
+        height: ${sizeH}px;
+        --drift-x: ${driftX}px;
+        --fall-y: ${fallY}px;
+        --rot: ${rotation}deg;
+        --target-opacity: ${opacity};
+        animation-duration: ${animDuration}s;
+        animation-delay: ${delay}s;
+      `;
+
+      confettiContainer.appendChild(p);
+    }
+
+    // Clean up particles after animation completes
+    setTimeout(() => {
+      if (confettiContainer) confettiContainer.innerHTML = '';
+    }, 800);
+  }
+
+  // Hook into Swup transition start
+  swup.hooks.on('visit:start', () => {
+    spawnShadowConfetti();
+  });
+
   // Hook into Swup page replacement
   swup.hooks.on('content:replace', () => {
     initPageFeatures();
