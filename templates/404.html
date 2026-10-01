@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Horizon Not Found | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="reader-container text-center" style="padding: 4rem 1rem;">
+  <div style="font-family: var(--font-mono, monospace); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--text-muted, #666666); text-transform: uppercase; margin-bottom: 1rem;">
+    [ERROR CODE 404]
+  </div>
+  
+  <h1 class="reader-title typewriter-entrance" style="font-size: 2.2rem; margin-bottom: 1.25rem;">
+    Singularity Horizon Void
+  </h1>
+  
+  <p class="section-subtitle" style="max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.6;">
+    The requested philosophical fragment or system path cannot be located within the archive. The coordinates may have shifted, decayed, or dissolved into the void.
+  </p>
+
+  <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+    <a href="{% url 'core:home' %}" class="btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem;">
+      Return To Origin
+    </a>
+    <a href="{% url 'philosophy:list' %}" class="btn-secondary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem;">
+      Browse Philosophy
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,24 +1,56 @@
+import os
 from pathlib import Path
 from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# --- Core Security ---
+# DEBUG defaults to False in production unless explicitly set to True
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("true", "1", "yes")
 
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-hudisthinking-production-ready-default-key')
+# SECRET_KEY pulled from environment variable in production
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    config('SECRET_KEY', default='c8f7a93b4e1d2c6f5a0b9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d')
+)
 
-DEBUG = config('DEBUG', default=True, cast=bool)
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,0.0.0.0,.run.app,.hudisthinking.com,hudisthinking.com', cast=Csv())
-
-# CSRF Trusted Origins for Cloud Run / custom domains if configured
-CSRF_TRUSTED_ORIGINS = config(
-    'CSRF_TRUSTED_ORIGINS',
-    default='http://127.0.0.1,http://localhost,https://*.run.app,https://*.hudisthinking.com,https://hudisthinking.com',
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='hudisthinking.com,www.hudisthinking.com,localhost,127.0.0.1,0.0.0.0,.run.app',
     cast=Csv()
 )
+
+# CSRF Trusted Origins for live forms and offcanvas drawer
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://hudisthinking.com,https://www.hudisthinking.com,https://*.run.app,http://localhost,http://127.0.0.1',
+    cast=Csv()
+)
+
+import sys
+TESTING = 'test' in sys.argv
+
+# --- Production Hardening (Active when DEBUG is False and not running automated tests) ---
+if not DEBUG and not TESTING:
+    # Tell Django it's behind Google Cloud Run's SSL-terminating proxy
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+
+    # Enforce cookies strictly over HTTPS
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # Prevent MIME sniffing
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    # HTTP Strict Transport Security (HSTS) - 1 year
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+# Frame embedding for the live admin drawer on the same origin
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Application definition
 INSTALLED_APPS = [
@@ -45,8 +77,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'config.urls'
 

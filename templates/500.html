@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 - Internal Singularity Error | HudIsThinking</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --fg: #ffffff;
+      --muted: #666666;
+      --border: #222222;
+      --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .error-card {
+      max-width: 600px;
+      width: 100%;
+      border: 1px solid var(--border);
+      padding: 3rem 2rem;
+      background: #080808;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+    }
+    .badge {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    p {
+      color: #aaaaaa;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    a {
+      display: inline-block;
+      border: 1px solid #ffffff;
+      color: #000000;
+      background: #ffffff;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    a:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-card">
+    <div class="badge">[ERROR CODE 500]</div>
+    <h1>Singularity Disruption</h1>
+    <p>
+      An unexpected disturbance occurred while rendering this state. The dialetical engine has preserved the core system, but this execution could not complete.
+    </p>
+    <a href="/">&larr; Return to Origin</a>
+  </div>
+</body>
+</html>

@@ -8,12 +8,15 @@ from django.contrib.auth import get_user_model
 
 def ensure_superusers():
     User = get_user_model()
-    # Read admin credentials from environment or fallback to user requested
     admin_user = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'hud')
     admin_email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'hudson.amaral11@gmail.com')
-    admin_pwd = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'bFtv3jkYa6d2drn')
+    admin_pwd = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
 
-    for uname in [admin_user, 'admin']:
+    if not admin_pwd:
+        print("[Notice] DJANGO_SUPERUSER_PASSWORD not set in environment. Preserving existing database superusers.")
+        return
+
+    for uname in set([admin_user, 'admin']):
         user, created = User.objects.get_or_create(
             username=uname,
             defaults={'email': admin_email, 'is_staff': True, 'is_superuser': True}
@@ -24,7 +27,7 @@ def ensure_superusers():
         user.set_password(admin_pwd)
         user.save()
         status = "Created" if created else "Updated"
-        print(f"[{status}] Superuser '{uname}' active with configured password.")
+        print(f"[{status}] Superuser '{uname}' active.")
 
 def ensure_content():
     from core.models import SiteConfiguration, AboutPage, ConnectPage, DBTemplate
