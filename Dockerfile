@@ -26,4 +26,6 @@ RUN python manage.py collectstatic --noinput && \
 
 EXPOSE 8080
 
-CMD exec gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 0 config.wsgi:application
+RUN chmod +x entrypoint.sh
+
+CMD ["./entrypoint.sh"]
