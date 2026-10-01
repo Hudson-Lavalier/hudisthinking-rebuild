@@ -62,9 +62,25 @@ class PhilosophyTests(TestCase):
         self.assertNotContains(res_none, "On the Bounds of Computational Perception")
 
     def test_detail_view(self):
+        # Update argument with justifications and references
+        self.argument.justifications = "### Warrant for Premise 1\nThermodynamic entropy necessitates finite computational erasure."
+        self.argument.references = "- Landauer, R. (1961). Irreversibility and heat generation in the computing process.\n- Bennett, C. H. (1982)."
+        self.argument.save()
+
         response = self.client.get(reverse('philosophy:detail', kwargs={'slug': self.argument.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Perception requires an observer")
         self.assertContains(response, "schema.org")
         self.assertContains(response, "Premise 1")
         self.assertContains(response, "Ethics")
+        # Check accordions & citations
+        self.assertContains(response, "Justifications / Elaborations")
+        self.assertContains(response, "Thermodynamic entropy necessitates")
+        self.assertContains(response, "References")
+        self.assertContains(response, "Landauer, R.")
+        self.assertContains(response, "Citation Format")
+        self.assertContains(response, "cite-apa")
+        self.assertContains(response, "cite-mla")
+        self.assertIn("HudIsThinking LLC", self.argument.get_apa_citation)
+        self.assertIn("On the Bounds of Computational Perception", self.argument.get_mla_citation)
+

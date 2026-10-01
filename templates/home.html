@@ -67,7 +67,7 @@
             <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
           </h3>
           <p class="card-body">{{ proj.tagline }}</p>
-          {% if proj.download_file %}
+          {% if proj.download_file and proj.show_download_button %}
             <div style="margin-top: 1rem;">
               <a href="{{ proj.get_absolute_url }}" class="btn-download" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
                 Download ({{ proj.file_size_display|default:"File" }})

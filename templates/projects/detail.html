@@ -48,11 +48,17 @@
 
     <h1 class="reader-title">{{ project.title }}</h1>
     <p style="font-size: 1.2rem; color: var(--text-secondary); line-height: 1.5;">{{ project.tagline }}</p>
+
+    {% if project.featured_image and project.show_featured_image %}
+      <div class="featured-media-frame">
+        <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" class="featured-media-img">
+      </div>
+    {% endif %}
   </header>
 
-  <!-- Download Box -->
-  {% if project.download_file %}
-    <div class="download-box">
+  <!-- Top Toggleable Download Box -->
+  {% if project.download_file and project.show_download_button %}
+    <div class="download-box top-download-bar">
       <div class="download-info">
         <strong class="download-title">{{ project.filename }}</strong>
         <span class="download-specs">
@@ -68,7 +74,7 @@
         </a>
       </div>
     </div>
-  {% else %}
+  {% elif not project.download_file and project.show_download_button %}
     <div class="monochrome-card" style="margin: 1.5rem 0;">
       <p class="card-body">Downloadable binary package currently pending release.</p>
     </div>

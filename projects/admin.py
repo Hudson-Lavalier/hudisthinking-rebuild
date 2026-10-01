@@ -11,17 +11,22 @@ class ProjectCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'project_type', 'version', 'platform', 'release_date', 'is_published')
-    list_filter = ('project_type', 'platform', 'is_published', 'release_date')
+    list_display = ('title', 'project_type', 'version', 'show_download_button', 'show_featured_image', 'is_published', 'release_date')
+    list_editable = ('show_download_button', 'show_featured_image')
+    list_filter = ('project_type', 'show_download_button', 'show_featured_image', 'platform', 'is_published', 'release_date')
     search_fields = ('title', 'tagline', 'description')
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
         ('Overview', {
             'fields': ('title', 'slug', 'project_type', 'tagline', 'description', 'release_date', 'is_published')
         }),
+        ('Featured Artwork', {
+            'fields': ('featured_image', 'show_featured_image'),
+            'description': 'Screenshot, artwork, or user interface preview.'
+        }),
         ('Downloadable Binary / Executable', {
-            'fields': ('download_file', 'version', 'platform', 'system_requirements'),
-            'description': 'Attach your packaged .exe or .zip archive here.'
+            'fields': ('download_file', 'show_download_button', 'version', 'platform', 'system_requirements'),
+            'description': 'Attach your packaged executable (.exe, .zip). Toggle the download button visibility above.'
         }),
         ('External Links', {
             'fields': ('github_url', 'itch_url'),

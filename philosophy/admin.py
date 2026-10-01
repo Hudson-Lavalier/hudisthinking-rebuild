@@ -22,14 +22,27 @@ class PhilosophyTagAdmin(admin.ModelAdmin):
 
 @admin.register(Argument)
 class ArgumentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'tag_list', 'published_date', 'is_published')
-    list_filter = ('category', 'tags', 'is_published', 'published_date')
-    search_fields = ('title', 'thesis', 'content')
+    list_display = ('title', 'category', 'tag_list', 'show_featured_image', 'published_date', 'is_published')
+    list_filter = ('category', 'tags', 'show_featured_image', 'is_published', 'published_date')
+    search_fields = ('title', 'thesis', 'content', 'justifications', 'references')
     prepopulated_fields = {'slug': ('title',)}
     filter_horizontal = ('tags',)
     fieldsets = (
         ('Article Content', {
             'fields': ('title', 'slug', 'category', 'tags', 'thesis', 'content', 'published_date', 'is_published')
+        }),
+        ('Featured Artwork', {
+            'fields': ('featured_image', 'show_featured_image'),
+            'description': 'Header artwork displayed at the top of the argument.'
+        }),
+        ('Philosophical Apparatus (Accordions)', {
+            'fields': ('justifications', 'references'),
+            'description': 'Breakdown of premise warrants (Justifications/Elaborations) and bibliographic sources (References). Markdown supported.'
+        }),
+        ('Academic Citation Formats', {
+            'classes': ('collapse',),
+            'fields': ('citation_apa', 'citation_mla'),
+            'description': 'Custom APA/MLA citation strings for readers to cite this work. If left blank, standard citations will be auto-generated.'
         }),
         ('SEO & Metadata (Optional)', {
             'classes': ('collapse',),

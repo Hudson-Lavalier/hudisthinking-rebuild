@@ -8,6 +8,11 @@
   <header class="reader-header">
     <h1 class="reader-title">About</h1>
     <p class="section-subtitle">{{ LLC_NAME }}</p>
+    {% if about and about.featured_image and about.show_featured_image %}
+      <div class="featured-media-frame">
+        <img src="{{ about.featured_image.url }}" alt="{{ about.title }}" class="featured-media-img">
+      </div>
+    {% endif %}
   </header>
 
   <div class="markdown-prose">

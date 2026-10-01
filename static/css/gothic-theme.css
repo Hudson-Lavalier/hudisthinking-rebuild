@@ -635,6 +635,200 @@ main.site-content {
 }
 
 /* ==========================================================================
+   Gothic Accordions, Academic Citations & Media Styling
+   ========================================================================== */
+
+/* Featured Media Artwork Frame */
+.featured-media-frame {
+  margin: 1.5rem 0 2rem;
+  border: 1px solid var(--border-subtle);
+  background-color: #000000;
+  padding: 4px;
+  display: block;
+}
+
+.featured-media-img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: cover;
+  display: block;
+  filter: contrast(110%);
+}
+
+/* Top Download Bar */
+.top-download-bar {
+  margin: 1.5rem 0 2.5rem;
+}
+
+/* Philosophical Apparatus: Gothic Accordions */
+.philosophical-apparatus {
+  margin: 3.5rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.gothic-accordion {
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg-surface);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.gothic-accordion:hover {
+  border-color: #666666;
+}
+
+.gothic-accordion[open] {
+  border-color: #ffffff;
+  background-color: var(--bg-surface-elevated);
+}
+
+.gothic-accordion-summary {
+  padding: 1rem 1.25rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  user-select: none;
+  list-style: none; /* Hide default native disclosure triangle */
+}
+
+.gothic-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-marker {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: monospace;
+  transition: color 0.2s ease;
+}
+
+.gothic-accordion[open] .accordion-marker {
+  color: #ffffff;
+}
+
+.gothic-accordion[open] .accordion-marker::before {
+  content: "[-] ";
+}
+
+.gothic-accordion:not([open]) .accordion-marker::before {
+  content: "[+] ";
+}
+
+/* Hide raw marker text if pseudo-element handles it */
+.accordion-marker {
+  font-size: 0;
+}
+.accordion-marker::before {
+  font-size: 0.85rem;
+}
+
+.accordion-title {
+  font-weight: normal;
+}
+
+.gothic-accordion-content {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Academic Citation Box */
+.citation-box {
+  margin: 2.5rem 0 1.5rem;
+  border: 1px solid var(--border-strong);
+  background-color: #000000;
+  padding: 1.25rem 1.5rem;
+}
+
+.citation-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.citation-box-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+}
+
+.citation-box-meta {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.citation-entry {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px dashed var(--border-subtle);
+}
+
+.citation-entry:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.citation-format-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.citation-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.btn-copy-cite {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-copy-cite:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: var(--bg-surface-elevated);
+}
+
+@media (max-width: 650px) {
+  .citation-entry {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+/* ==========================================================================
    Peaceful Gargantua Gravitational Lensing Transition System
    ========================================================================== */
 

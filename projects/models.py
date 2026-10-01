@@ -29,6 +29,18 @@ class Project(models.Model):
         related_name='projects',
         help_text="Choose or create categories under Project Categories"
     )
+    # Featured Artwork & Visuals
+    featured_image = models.ImageField(
+        upload_to='projects/images/',
+        blank=True,
+        null=True,
+        help_text="Project screenshot, cover art, or interface preview."
+    )
+    show_featured_image = models.BooleanField(
+        default=True,
+        help_text="Toggle displaying the featured image on the project page."
+    )
+
     tagline = models.CharField(
         max_length=300,
         help_text="One-line summary for listing cards."
@@ -36,11 +48,17 @@ class Project(models.Model):
     description = models.TextField(
         help_text="Project details, controls, instructions (Markdown supported)."
     )
+
+    # Downloadable Binary / Packaging
     download_file = models.FileField(
         upload_to='downloads/',
         blank=True,
         null=True,
         help_text="Upload packaged executable or archive (.exe, .zip, etc.)"
+    )
+    show_download_button = models.BooleanField(
+        default=True,
+        help_text="Toggle displaying the download button at the top of the project page and cards."
     )
     version = models.CharField(max_length=50, default="1.0.0")
     platform = models.CharField(

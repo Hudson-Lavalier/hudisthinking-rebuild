@@ -4,7 +4,7 @@ from django.contrib import admin
 from django import forms
 from django.conf import settings
 from django.utils.html import format_html
-from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage
+from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage, MediaItem
 
 class DBTemplateForm(forms.ModelForm):
     class Meta:
@@ -99,7 +99,6 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-
 @admin.register(NavigationItem)
 class NavigationItemAdmin(admin.ModelAdmin):
     list_display = ('label', 'url', 'location', 'order', 'is_active', 'open_in_new_tab')
@@ -110,17 +109,88 @@ class NavigationItemAdmin(admin.ModelAdmin):
 
 @admin.register(CustomPage)
 class CustomPageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'is_published', 'updated_at')
-    list_filter = ('is_published',)
+    list_display = ('title', 'slug', 'show_featured_image', 'is_published', 'updated_at')
+    list_filter = ('is_published', 'show_featured_image')
     search_fields = ('title', 'slug', 'content')
     prepopulated_fields = {'slug': ('title',)}
+    fieldsets = (
+        ('Page Content', {
+            'fields': ('title', 'slug', 'content', 'is_published')
+        }),
+        ('Featured Artwork', {
+            'fields': ('featured_image', 'show_featured_image'),
+            'description': 'Optional visual asset displayed at the top of the page.'
+        }),
+        ('SEO Metadata', {
+            'classes': ('collapse',),
+            'fields': ('meta_description',),
+        }),
+    )
 
 
 @admin.register(AboutPage)
 class AboutPageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'updated_at')
+    list_display = ('title', 'show_featured_image', 'updated_at')
+    fieldsets = (
+        ('Overview', {
+            'fields': ('title', 'content')
+        }),
+        ('Featured Artwork', {
+            'fields': ('featured_image', 'show_featured_image'),
+        }),
+        ('SEO Metadata', {
+            'classes': ('collapse',),
+            'fields': ('meta_description',),
+        }),
+    )
 
     def has_add_permission(self, request):
         if self.model.objects.exists():
             return False
         return super().has_add_permission(request)
+
+
+@admin.register(MediaItem)
+class MediaItemAdmin(admin.ModelAdmin):
+    list_display = ('preview_thumb', 'title', 'media_type', 'file_size_display', 'embed_code', 'uploaded_at')
+    list_filter = ('media_type', 'uploaded_at')
+    search_fields = ('title', 'description', 'file')
+    readonly_fields = ('uploaded_at', 'file_size_display', 'embed_code', 'preview_large')
+
+    fieldsets = (
+        ('Upload Asset', {
+            'fields': ('title', 'file', 'media_type', 'description')
+        }),
+        ('Markdown & Asset Details', {
+            'fields': ('embed_code', 'file_size_display', 'uploaded_at', 'preview_large'),
+            'description': 'Copy and paste the markdown embed code directly into any writing, argument, or page.'
+        }),
+    )
+
+    def preview_thumb(self, obj):
+        if obj.file and obj.media_type == 'image':
+            return format_html(
+                '<img src="{}" style="height: 38px; width: auto; max-width: 60px; object-fit: contain; border: 1px solid #444; background: #000;" />',
+                obj.file.url
+            )
+        return format_html('<span style="color: #888; font-family: monospace;">[{}]</span>', obj.media_type.upper())
+    preview_thumb.short_description = "Preview"
+
+    def preview_large(self, obj):
+        if obj.file and obj.media_type == 'image':
+            return format_html(
+                '<img src="{}" style="max-height: 250px; max-width: 100%; border: 1px solid #444; background: #000;" />',
+                obj.file.url
+            )
+        return "No image preview available."
+    preview_large.short_description = "Visual Preview"
+
+    def embed_code(self, obj):
+        if not obj.file:
+            return "-"
+        code = obj.markdown_embed
+        return format_html(
+            '<input type="text" value="{}" readonly style="width: 100%; max-width: 500px; font-family: monospace; background: #1a1a1a; color: #fff; border: 1px solid #444; padding: 4px 8px;" onclick="this.select();" />',
+            code
+        )
+    embed_code.short_description = "Markdown Embed Code (Click to Copy)"

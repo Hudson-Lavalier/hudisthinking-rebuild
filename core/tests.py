@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage
+from django.core.files.uploadedfile import SimpleUploadedFile
+from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage, MediaItem
 
 class MetaEditabilityTests(TestCase):
     def setUp(self):
@@ -55,13 +56,30 @@ class MetaEditabilityTests(TestCase):
         self.assertContains(response, "Manifesto")
 
     def test_custom_page_rendering(self):
+        dummy_img = SimpleUploadedFile("cover.jpg", b"\xff\xd8\xff\xe0dummyjpgcontent", content_type="image/jpeg")
         CustomPage.objects.create(
             title="Axioms of Thought",
             slug="axioms-of-thought",
             content="## Principle 1\nTruth is foundational.",
+            featured_image=dummy_img,
+            show_featured_image=True,
             is_published=True
         )
         response = self.client.get(reverse('core:custom_page', kwargs={'slug': 'axioms-of-thought'}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Axioms of Thought")
         self.assertContains(response, "Truth is foundational.")
+        self.assertContains(response, "featured-media-img")
+
+    def test_media_item_model_and_embeds(self):
+        dummy_media = SimpleUploadedFile("diagram.png", b"\x89PNGdummycontent", content_type="image/png")
+        item = MediaItem.objects.create(
+            title="Cosmological Lattice",
+            file=dummy_media,
+            media_type="image",
+            description="Diagram of cosmic manifold."
+        )
+        self.assertIn("Cosmological Lattice", str(item))
+        self.assertIn("![Cosmological Lattice]", item.markdown_embed)
+        self.assertNotEqual(item.file_size_display, "0 B")
+

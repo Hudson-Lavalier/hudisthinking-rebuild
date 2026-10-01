@@ -60,6 +60,12 @@
 
     <h1 class="reader-title typewriter-entrance">{{ argument.title }}</h1>
 
+    {% if argument.featured_image and argument.show_featured_image %}
+      <div class="featured-media-frame">
+        <img src="{{ argument.featured_image.url }}" alt="{{ argument.title }}" class="featured-media-img">
+      </div>
+    {% endif %}
+
     {% if argument.thesis %}
       <div class="thesis-callout">
         <strong>Core Premise / Thesis:</strong>
@@ -80,9 +86,77 @@
     {{ argument.content|markdown }}
   </div>
 
+  <!-- Philosophical Apparatus: Accordions -->
+  {% if argument.justifications or argument.references %}
+    <section class="philosophical-apparatus">
+      {% if argument.justifications %}
+        <details class="gothic-accordion">
+          <summary class="gothic-accordion-summary">
+            <span class="accordion-marker">[+]</span>
+            <span class="accordion-title">Justifications / Elaborations</span>
+          </summary>
+          <div class="gothic-accordion-content markdown-prose">
+            {{ argument.justifications|markdown }}
+          </div>
+        </details>
+      {% endif %}
+
+      {% if argument.references %}
+        <details class="gothic-accordion">
+          <summary class="gothic-accordion-summary">
+            <span class="accordion-marker">[+]</span>
+            <span class="accordion-title">References</span>
+          </summary>
+          <div class="gothic-accordion-content markdown-prose">
+            {{ argument.references|markdown }}
+          </div>
+        </details>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  <!-- Academic Citation Format Box -->
+  <section class="citation-box">
+    <div class="citation-box-header">
+      <span class="citation-box-label">Citation Format</span>
+      <span class="citation-box-meta">Academic Reference</span>
+    </div>
+
+    <div class="citation-entry">
+      <div class="citation-format-tag">APA</div>
+      <div class="citation-text" id="cite-apa">{{ argument.get_apa_citation }}</div>
+      <button type="button" class="btn-copy-cite" onclick="copyCitationText('cite-apa', this)">[COPY APA]</button>
+    </div>
+
+    <div class="citation-entry">
+      <div class="citation-format-tag">MLA</div>
+      <div class="citation-text" id="cite-mla">{{ argument.get_mla_citation }}</div>
+      <button type="button" class="btn-copy-cite" onclick="copyCitationText('cite-mla', this)">[COPY MLA]</button>
+    </div>
+  </section>
+
   <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
     <a href="{% url 'philosophy:list' %}" class="btn-secondary">&larr; Archive Index</a>
     <a href="{% url 'admin:philosophy_argument_change' argument.id %}" class="btn-secondary" data-no-swup>[Edit in Admin]</a>
   </div>
 </article>
+
+<script>
+function copyCitationText(elementId, btnElement) {
+  const textElem = document.getElementById(elementId);
+  if (!textElem) return;
+  const text = textElem.innerText.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = btnElement.innerText;
+    btnElement.innerText = '[COPIED]';
+    btnElement.style.color = '#ffffff';
+    btnElement.style.borderColor = '#ffffff';
+    setTimeout(() => {
+      btnElement.innerText = originalText;
+      btnElement.style.color = '';
+      btnElement.style.borderColor = '';
+    }, 1800);
+  });
+}
+</script>
 {% endblock %}

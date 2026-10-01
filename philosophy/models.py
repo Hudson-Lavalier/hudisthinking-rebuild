@@ -48,12 +48,45 @@ class Argument(models.Model):
         related_name='arguments',
         help_text="Select or create tags such as Ethics, Meta-Ethics, Metaphysics, Free Will"
     )
+    # Featured Artwork & Visuals
+    featured_image = models.ImageField(
+        upload_to='philosophy/images/',
+        blank=True,
+        null=True,
+        help_text="Header artwork or illustrative diagram for this argument."
+    )
+    show_featured_image = models.BooleanField(
+        default=True,
+        help_text="Toggle displaying the featured image on this argument page."
+    )
+
     thesis = models.CharField(
         max_length=350,
         blank=True,
         help_text="Brief thesis statement or core premise summary"
     )
     content = models.TextField(help_text="Full text (Markdown supported).")
+
+    # Philosophical Apparatus & Accordions
+    justifications = models.TextField(
+        blank=True,
+        help_text="Justifications and elaborations breaking down what warrants each premise (Markdown supported)."
+    )
+    references = models.TextField(
+        blank=True,
+        help_text="Sources, literature citations, and bibliography (Markdown supported)."
+    )
+
+    # Academic Citation Overrides
+    citation_apa = models.TextField(
+        blank=True,
+        help_text="Custom APA citation override. Leave blank to auto-generate."
+    )
+    citation_mla = models.TextField(
+        blank=True,
+        help_text="Custom MLA citation override. Leave blank to auto-generate."
+    )
+
     published_date = models.DateField(default=timezone.now)
     is_published = models.BooleanField(default=True, db_index=True)
     created_at = models.DateTimeField(auto_now=True)
@@ -88,3 +121,18 @@ class Argument(models.Model):
         words = len(self.content.split())
         minutes = max(1, round(words / 200))
         return f"{minutes} min read"
+
+    @property
+    def get_apa_citation(self):
+        if self.citation_apa.strip():
+            return self.citation_apa.strip()
+        year = self.published_date.year if self.published_date else 2026
+        return f"HudIsThinking. ({year}). {self.title}. HudIsThinking LLC."
+
+    @property
+    def get_mla_citation(self):
+        if self.citation_mla.strip():
+            return self.citation_mla.strip()
+        year = self.published_date.year if self.published_date else 2026
+        return f'HudIsThinking. "{self.title}." HudIsThinking LLC, {year}.'
+

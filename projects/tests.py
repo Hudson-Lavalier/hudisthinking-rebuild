@@ -49,4 +49,22 @@ class ProjectsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "SoftwareApplication")
         self.assertContains(response, self.project.filename)
+        self.assertContains(response, "Download Executable")
         self.assertContains(response, "WASD to move")
+
+    def test_download_button_toggle(self):
+        # Disable download button
+        self.project.show_download_button = False
+        self.project.save()
+
+        # Check detail page
+        response = self.client.get(reverse('projects:detail', kwargs={'slug': self.project.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "top-download-bar")
+        self.assertNotContains(response, "Download Executable")
+
+        # Check list page
+        list_res = self.client.get(reverse('projects:list'))
+        self.assertEqual(list_res.status_code, 200)
+        self.assertNotContains(list_res, f"Download ({self.project.file_size_display})")
+

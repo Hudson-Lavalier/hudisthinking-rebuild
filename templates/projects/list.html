@@ -55,7 +55,7 @@
 
         <div style="margin-top: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
           <a href="{{ proj.get_absolute_url }}" class="btn-secondary">Overview & Details</a>
-          {% if proj.download_file %}
+          {% if proj.download_file and proj.show_download_button %}
             <a href="{{ proj.download_file.url }}" class="btn-download" download>
               Download ({{ proj.file_size_display|default:"File" }})
             </a>

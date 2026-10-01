@@ -118,6 +118,16 @@ class NavigationItem(models.Model):
 class CustomPage(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, help_text="URL slug (e.g. 'manifesto' makes it accessible at /manifesto/)")
+    featured_image = models.ImageField(
+        upload_to='pages/images/',
+        blank=True,
+        null=True,
+        help_text="Optional header image for this page."
+    )
+    show_featured_image = models.BooleanField(
+        default=True,
+        help_text="Toggle displaying the featured image on this page."
+    )
     content = models.TextField(help_text="Page body content (Markdown and HTML supported).")
     meta_description = models.CharField(max_length=160, blank=True)
     is_published = models.BooleanField(default=True)
@@ -138,6 +148,16 @@ class CustomPage(models.Model):
 
 class AboutPage(models.Model):
     title = models.CharField(max_length=200, default="About HudIsThinking LLC")
+    featured_image = models.ImageField(
+        upload_to='branding/',
+        blank=True,
+        null=True,
+        help_text="Header or profile image for the About page."
+    )
+    show_featured_image = models.BooleanField(
+        default=True,
+        help_text="Toggle displaying the featured image on the About page."
+    )
     content = models.TextField(
         blank=True,
         help_text="Markdown supported. Leave blank or edit anytime via Django admin."
@@ -155,3 +175,51 @@ class AboutPage(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MediaItem(models.Model):
+    MEDIA_TYPE_CHOICES = [
+        ('image', 'Image'),
+        ('document', 'Document / PDF'),
+        ('binary', 'Executable / Archive'),
+        ('audio', 'Audio'),
+        ('other', 'Other'),
+    ]
+
+    title = models.CharField(max_length=200, help_text="Descriptive title or label for this media asset.")
+    file = models.FileField(upload_to='library/%Y/%m/', help_text="Upload any image, document, archive, or binary.")
+    media_type = models.CharField(max_length=20, choices=MEDIA_TYPE_CHOICES, default='image')
+    description = models.CharField(max_length=300, blank=True, help_text="Brief notes or caption.")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-uploaded_at']
+        verbose_name = "Media Asset"
+        verbose_name_plural = "Media Library"
+
+    def __str__(self):
+        return f"{self.title} ({self.get_media_type_display()})"
+
+    @property
+    def file_size_display(self):
+        if not self.file:
+            return "0 B"
+        try:
+            bytes_val = self.file.size
+            if bytes_val < 1024:
+                return f"{bytes_val} B"
+            elif bytes_val < 1024 * 1024:
+                return f"{bytes_val / 1024:.1f} KB"
+            else:
+                return f"{bytes_val / (1024 * 1024):.1f} MB"
+        except Exception:
+            return "Unknown"
+
+    @property
+    def markdown_embed(self):
+        if not self.file:
+            return ""
+        if self.media_type == 'image':
+            return f"![{self.title}]({self.file.url})"
+        return f"[{self.title}]({self.file.url})"
+
