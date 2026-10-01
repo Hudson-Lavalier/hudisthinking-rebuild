@@ -8,4 +8,5 @@ urlpatterns = [
     path('connect/', views.connect, name='connect'),
     path('about/', views.about, name='about'),
     path('page/<slug:slug>/', views.custom_page, name='custom_page'),
+    path('<slug:slug>/', views.custom_page, name='custom_page_direct'),
 ]

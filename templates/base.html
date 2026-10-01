@@ -112,6 +112,8 @@
           <a href="{% url 'projects:list' %}">Projects</a>
           <a href="{% url 'core:connect' %}">About Connect</a>
           <a href="{% url 'core:about' %}">About</a>
+          <a href="{% url 'core:custom_page_direct' 'privacy-policy' %}">Privacy Policy</a>
+          <a href="{% url 'core:custom_page_direct' 'terms-of-service' %}">Terms of Service</a>
         {% endif %}
         <a href="https://connect.hudisthinking.com/" target="_blank" rel="noopener noreferrer">[Connect &rarr;]</a>
         <a href="{% url 'admin:index' %}" data-no-swup>[Admin]</a>
