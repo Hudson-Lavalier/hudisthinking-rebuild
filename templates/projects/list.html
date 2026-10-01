@@ -17,7 +17,7 @@
   <a href="{% url 'projects:list' %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
   {% for cat in project_types %}
     <a href="{% url 'projects:list' %}?type={{ cat.slug }}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
-      {% if cat.icon %}{{ cat.icon }} {% endif %}{{ cat.name }}
+      {{ cat.name }}
     </a>
   {% endfor %}
 </div>
@@ -27,7 +27,7 @@
     {% for proj in projects %}
       <article class="monochrome-card">
         <div class="card-meta">
-          <span class="tag-badge">{% if proj.project_type %}{% if proj.project_type.icon %}{{ proj.project_type.icon }} {% endif %}{{ proj.project_type.name }}{% else %}Software{% endif %}</span>
+          <span class="tag-badge">{% if proj.project_type %}{{ proj.project_type.name }}{% else %}Software{% endif %}</span>
           <span>{{ proj.platform }}</span>
           <span>&bull;</span>
           <span>Version {{ proj.version }}</span>

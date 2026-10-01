@@ -3,7 +3,7 @@ from .models import Project, ProjectCategory
 
 @admin.register(ProjectCategory)
 class ProjectCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'icon', 'order')
+    list_display = ('name', 'slug', 'order')
     list_editable = ('order',)
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')

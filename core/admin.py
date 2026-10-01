@@ -40,8 +40,8 @@ class DBTemplateAdmin(admin.ModelAdmin):
 
     def status_badge(self, obj):
         if obj.is_active:
-            return format_html('<span style="color: #00e676; font-weight: bold;">&#x2714; Overriding Filesystem</span>')
-        return format_html('<span style="color: #888888;">Inactive (Filesystem Fallback)</span>')
+            return format_html('<span style="color: #00e676; font-weight: bold;">[Active: Overriding Filesystem]</span>')
+        return format_html('<span style="color: #888888;">[Inactive: Filesystem Fallback]</span>')
     status_badge.short_description = "Engine Status"
 
     def save_model(self, request, obj, form, change):

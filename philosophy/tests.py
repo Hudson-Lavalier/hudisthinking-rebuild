@@ -7,8 +7,7 @@ class PhilosophyTests(TestCase):
         self.client = Client()
         self.category = PhilosophyCategory.objects.create(
             name="Metaphysics",
-            slug="metaphysics",
-            icon="🌌"
+            slug="metaphysics"
         )
         self.argument = Argument.objects.create(
             title="On the Bounds of Computational Perception",

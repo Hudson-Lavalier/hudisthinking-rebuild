@@ -6,7 +6,6 @@ class PhilosophyCategory(models.Model):
     name = models.CharField(max_length=100, unique=True, help_text="Category name (e.g. 'Arguments', 'Essays', 'Metaphysics')")
     slug = models.SlugField(max_length=100, unique=True, help_text="URL-friendly identifier")
     description = models.TextField(blank=True, help_text="Short description of this category")
-    icon = models.CharField(max_length=50, blank=True, help_text="Optional icon glyph, badge symbol, or emoji")
     order = models.PositiveIntegerField(default=0, help_text="Sort order on archive tabs")
 
     class Meta:
@@ -15,7 +14,7 @@ class PhilosophyCategory(models.Model):
         verbose_name_plural = "Philosophy Categories"
 
     def __str__(self):
-        return f"{self.icon + ' ' if self.icon else ''}{self.name}"
+        return self.name
 
 
 class Argument(models.Model):

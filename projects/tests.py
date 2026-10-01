@@ -8,8 +8,7 @@ class ProjectsTests(TestCase):
         self.client = Client()
         self.category = ProjectCategory.objects.create(
             name="Standalone Executables",
-            slug="standalone-executables",
-            icon="📦"
+            slug="standalone-executables"
         )
         dummy_file = SimpleUploadedFile("demo_game.zip", b"PK\x03\x04dummycontent")
         self.project = Project.objects.create(

@@ -45,29 +45,29 @@ class Command(BaseCommand):
         # 3. Philosophy Categories
         cat_arg, _ = PhilosophyCategory.objects.get_or_create(
             slug='arguments',
-            defaults={'name': 'Arguments', 'icon': '⚔', 'order': 1}
+            defaults={'name': 'Arguments', 'order': 1}
         )
         cat_essay, _ = PhilosophyCategory.objects.get_or_create(
             slug='essays',
-            defaults={'name': 'Essays', 'icon': '📜', 'order': 2}
+            defaults={'name': 'Essays', 'order': 2}
         )
         cat_frag, _ = PhilosophyCategory.objects.get_or_create(
             slug='fragments',
-            defaults={'name': 'Fragments', 'icon': '✦', 'order': 3}
+            defaults={'name': 'Fragments', 'order': 3}
         )
 
         # 4. Project Categories
         type_game, _ = ProjectCategory.objects.get_or_create(
             slug='games',
-            defaults={'name': 'Games', 'icon': '🎮', 'order': 1}
+            defaults={'name': 'Games', 'order': 1}
         )
         type_exe, _ = ProjectCategory.objects.get_or_create(
             slug='executables',
-            defaults={'name': 'Executables', 'icon': '📦', 'order': 2}
+            defaults={'name': 'Executables', 'order': 2}
         )
         type_proto, _ = ProjectCategory.objects.get_or_create(
             slug='prototypes',
-            defaults={'name': 'Prototypes', 'icon': '⚙', 'order': 3}
+            defaults={'name': 'Prototypes', 'order': 3}
         )
 
         # 5. About Page placeholder

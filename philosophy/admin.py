@@ -3,7 +3,7 @@ from .models import Argument, PhilosophyCategory
 
 @admin.register(PhilosophyCategory)
 class PhilosophyCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'icon', 'order')
+    list_display = ('name', 'slug', 'order')
     list_editable = ('order',)
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')

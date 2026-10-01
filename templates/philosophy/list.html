@@ -17,7 +17,7 @@
   <a href="{% url 'philosophy:list' %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
   {% for cat in categories %}
     <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
-      {% if cat.icon %}{{ cat.icon }} {% endif %}{{ cat.name }}
+      {{ cat.name }}
     </a>
   {% endfor %}
 </div>
@@ -27,7 +27,7 @@
     {% for arg in arguments %}
       <article class="monochrome-card">
         <div class="card-meta">
-          <span class="tag-badge">{% if arg.category %}{% if arg.category.icon %}{{ arg.category.icon }} {% endif %}{{ arg.category.name }}{% else %}General{% endif %}</span>
+          <span class="tag-badge">{% if arg.category %}{{ arg.category.name }}{% else %}General{% endif %}</span>
           <span>{{ arg.published_date|date:"F j, Y" }}</span>
           <span>&bull;</span>
           <span>{{ arg.estimated_read_time }}</span>
