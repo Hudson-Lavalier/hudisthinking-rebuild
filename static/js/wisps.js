@@ -10,7 +10,7 @@
   const ctx = canvas.getContext('2d');
   let width, height;
   let wisps = [];
-  const WISP_COUNT = 45;
+  const WISP_COUNT = 16; // Sparsely distributed, calm and non-distracting
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -21,15 +21,15 @@
     return {
       x: Math.random() * (width || window.innerWidth),
       y: Math.random() * (height || window.innerHeight),
-      vx: (Math.random() - 0.5) * 0.45,
-      vy: -0.2 - Math.random() * 0.45, // Gentle upward/ambient drift
-      radius: 1.2 + Math.random() * 2.2,
-      glowRadius: 10 + Math.random() * 20,
-      baseAlpha: 0.15 + Math.random() * 0.65,
-      pulseSpeed: 0.015 + Math.random() * 0.03,
+      vx: (Math.random() - 0.5) * 0.08, // Very subtle horizontal drift
+      vy: -0.03 - Math.random() * 0.07, // Slow, lazy upward drift
+      radius: 1.0 + Math.random() * 1.8,
+      glowRadius: 10 + Math.random() * 18,
+      baseAlpha: 0.12 + Math.random() * 0.48,
+      pulseSpeed: 0.003 + Math.random() * 0.005, // Slow, hypnotic breathing
       pulseOffset: Math.random() * Math.PI * 2,
       wanderAngle: Math.random() * Math.PI * 2,
-      wanderSpeed: 0.01 + Math.random() * 0.02,
+      wanderSpeed: 0.002 + Math.random() * 0.004,
     };
   }
 
@@ -49,10 +49,10 @@
     for (let i = 0; i < wisps.length; i++) {
       const w = wisps[i];
 
-      // Subtle organic wandering
+      // Very gentle, slow organic wandering
       w.wanderAngle += w.wanderSpeed;
-      w.x += w.vx + Math.cos(w.wanderAngle) * 0.25;
-      w.y += w.vy + Math.sin(w.wanderAngle) * 0.15;
+      w.x += w.vx + Math.cos(w.wanderAngle) * 0.08;
+      w.y += w.vy + Math.sin(w.wanderAngle) * 0.05;
 
       // Wrap around screen boundaries seamlessly
       if (w.y < -30) {
