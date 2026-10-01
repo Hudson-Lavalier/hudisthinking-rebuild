@@ -11,12 +11,12 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-hudisthinking-product
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,0.0.0.0', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost,0.0.0.0,.run.app,.hudisthinking.com,hudisthinking.com', cast=Csv())
 
 # CSRF Trusted Origins for Cloud Run / custom domains if configured
 CSRF_TRUSTED_ORIGINS = config(
     'CSRF_TRUSTED_ORIGINS',
-    default='http://127.0.0.1,http://localhost',
+    default='http://127.0.0.1,http://localhost,https://*.run.app,https://*.hudisthinking.com,https://hudisthinking.com',
     cast=Csv()
 )
 
