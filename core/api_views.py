@@ -13,6 +13,7 @@ EDITABLE_WHITELIST = {
     'philosophy.argument': {'title', 'thesis', 'content', 'justifications', 'references', 'is_published'},
     'core.custompage': {'title', 'content', 'meta_description', 'is_published'},
     'core.aboutpage': {'title', 'content', 'meta_description'},
+    'core.siteconfiguration': {'site_title', 'tagline', 'meta_description'},
     'projects.project': {'title', 'tagline', 'description', 'platform', 'version', 'is_published'},
 }
 

@@ -6,7 +6,10 @@
 {% block content %}
 <article class="reader-container">
   <header class="reader-header">
-    <h1 class="reader-title">About</h1>
+    <h1 class="reader-title"
+        data-live-model="core.aboutpage"
+        data-live-id="{{ about.id|default:1 }}"
+        data-live-field="title">{{ about.title|default:"About" }}</h1>
     <p class="section-subtitle">{{ LLC_NAME }}</p>
     {% if about and about.featured_image and about.show_featured_image %}
       <div class="featured-media-frame">
@@ -15,19 +18,16 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose">
+  <div class="markdown-prose"
+       data-live-model="core.aboutpage"
+       data-live-id="{{ about.id|default:1 }}"
+       data-live-field="content"
+       data-live-format="markdown"
+       data-live-raw="{{ about.content|default:'Personal archive of philosophical arguments, written manuscripts, and software works.'|escape }}">
     {% if about and about.content %}
       {{ about.content|markdown }}
     {% else %}
-      <p>
-        HudIsThinking LLC.
-      </p>
-      <p>
-        Personal archive of philosophical arguments, written manuscripts, and software works.
-      </p>
-      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 2rem;">
-        [Section template ready. Content can be added or updated directly in the <a href="{% url 'admin:index' %}">Admin Dashboard</a>.]
-      </p>
+      <p>Personal archive of philosophical arguments, written manuscripts, and software works.</p>
     {% endif %}
   </div>
 </article>

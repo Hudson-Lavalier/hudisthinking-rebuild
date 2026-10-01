@@ -46,8 +46,14 @@
       <span>Released {{ project.release_date|date:"F j, Y" }}</span>
     </div>
 
-    <h1 class="reader-title">{{ project.title }}</h1>
-    <p style="font-size: 1.2rem; color: var(--text-secondary); line-height: 1.5;">{{ project.tagline }}</p>
+    <h1 class="reader-title"
+        data-live-model="projects.project"
+        data-live-id="{{ project.id }}"
+        data-live-field="title">{{ project.title }}</h1>
+    <p style="font-size: 1.2rem; color: var(--text-secondary); line-height: 1.5;"
+       data-live-model="projects.project"
+       data-live-id="{{ project.id }}"
+       data-live-field="tagline">{{ project.tagline }}</p>
 
     {% if project.featured_image and project.show_featured_image %}
       <div class="featured-media-frame">
@@ -93,7 +99,12 @@
   {% endif %}
 
   <!-- Overview Prose -->
-  <div class="markdown-prose">
+  <div class="markdown-prose"
+       data-live-model="projects.project"
+       data-live-id="{{ project.id }}"
+       data-live-field="description"
+       data-live-format="markdown"
+       data-live-raw="{{ project.description|escape }}">
     <h2 style="font-size: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">Overview & Instructions</h2>
     {{ project.description|markdown }}
   </div>
