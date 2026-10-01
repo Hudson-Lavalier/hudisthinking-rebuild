@@ -4,7 +4,7 @@ from django.contrib import admin
 from django import forms
 from django.conf import settings
 from django.utils.html import format_html
-from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage, MediaItem
+from .models import SiteConfiguration, DBTemplate, NavigationItem, CustomPage, AboutPage, ConnectPage, MediaItem
 
 class DBTemplateForm(forms.ModelForm):
     class Meta:
@@ -148,6 +148,40 @@ class AboutPageAdmin(admin.ModelAdmin):
         if self.model.objects.exists():
             return False
         return super().has_add_permission(request)
+
+
+@admin.register(ConnectPage)
+class ConnectPageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'badge', 'updated_at')
+    fieldsets = (
+        ('Header & Hero', {
+            'fields': ('badge', 'title', 'subtitle', 'cta_label', 'cta_url', 'destination_label')
+        }),
+        ('Pillar 1: Publish & Host', {
+            'fields': ('pillar_1_title', 'pillar_1_desc')
+        }),
+        ('Pillar 2: Schedule Debates', {
+            'fields': ('pillar_2_title', 'pillar_2_desc')
+        }),
+        ('Pillar 3: Premise Discussions', {
+            'fields': ('pillar_3_title', 'pillar_3_desc')
+        }),
+        ('Pillar 4: Dialectical Network', {
+            'fields': ('pillar_4_title', 'pillar_4_desc')
+        }),
+        ('Bottom Callout Panel', {
+            'fields': ('callout_heading', 'callout_body', 'callout_cta_label', 'callout_cta_url')
+        }),
+    )
+
+    def has_add_permission(self, request):
+        if self.model.objects.exists():
+            return False
+        return super().has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 
 @admin.register(MediaItem)

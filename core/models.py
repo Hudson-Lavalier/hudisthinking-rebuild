@@ -176,6 +176,69 @@ class AboutPage(models.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def get_solo(cls):
+        obj, _ = cls.objects.get_or_create(id=1, defaults={
+            'title': 'About HudIsThinking LLC',
+            'content': 'Personal archive of philosophical arguments, written manuscripts, and software works.'
+        })
+        return obj
+
+
+class ConnectPage(models.Model):
+    badge = models.CharField(max_length=100, default="[COMMUNITY & DIALECTIC PLATFORM]")
+    title = models.CharField(max_length=200, default="HudIsThinking Connect")
+    subtitle = models.CharField(
+        max_length=400,
+        default="Independent philosophical publishing, live debate scheduling, and peer inquiry."
+    )
+    cta_label = models.CharField(max_length=100, default="LAUNCH CONNECT ->")
+    cta_url = models.CharField(max_length=255, default="https://connect.hudisthinking.com/")
+    destination_label = models.CharField(max_length=100, default="connect.hudisthinking.com")
+
+    # Four Dialectical Pillars
+    pillar_1_title = models.CharField(max_length=200, default="Publish & Host Philosophy")
+    pillar_1_desc = models.TextField(
+        default="A dedicated home for independent authors and thinkers to publish formal philosophical works. Retain full authorship over arguments, systematic treatises, logic proofs, and essays within an archive designed for long-form contemplation rather than ephemeral feeds."
+    )
+
+    pillar_2_title = models.CharField(max_length=200, default="Schedule Live Debates")
+    pillar_2_desc = models.TextField(
+        default="Organize and schedule live, real-time verbal or written debates with other philosophers. Set clear formal theses, establish dialectical constraints, agree on rules of engagement, and hold structured intellectual discourse in front of peers."
+    )
+
+    pillar_3_title = models.CharField(max_length=200, default="Premise & Argument Discussions")
+    pillar_3_desc = models.TextField(
+        default="Engage deeply with works published by others. Start focused discussion threads dissecting individual premises, formulate rigorous counter-arguments, present counter-examples, and develop collaborative dialectical rebuttals."
+    )
+
+    pillar_4_title = models.CharField(max_length=200, default="Dialectical Network")
+    pillar_4_desc = models.TextField(
+        default="Connect directly with peers pursuing epistemology, metaphysics, ethics, theology, and philosophical logic. Build an ongoing intellectual record and participate in a community founded on analytical rigor and open inquiry."
+    )
+
+    # Bottom Callout Panel
+    callout_heading = models.CharField(max_length=200, default="ENTER THE PLATFORM")
+    callout_body = models.TextField(
+        default="Connect is an external standalone portal within the HudIsThinking ecosystem. Create an account, browse published philosophical treatises, schedule upcoming debates, or publish your own work today."
+    )
+    callout_cta_label = models.CharField(max_length=100, default="VISIT CONNECT.HUDISTHINKING.COM ->")
+    callout_cta_url = models.CharField(max_length=255, default="https://connect.hudisthinking.com/")
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "About Connect Page"
+        verbose_name_plural = "About Connect Page"
+
+    def __str__(self):
+        return self.title
+
+    @classmethod
+    def get_solo(cls):
+        obj, _ = cls.objects.get_or_create(id=1)
+        return obj
+
 
 class MediaItem(models.Model):
     MEDIA_TYPE_CHOICES = [

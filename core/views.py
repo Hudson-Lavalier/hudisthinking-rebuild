@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import AboutPage, CustomPage
+from .models import AboutPage, ConnectPage, CustomPage
 from philosophy.models import Argument
 from projects.models import Project
 
@@ -12,13 +12,16 @@ def home(request):
     })
 
 def about(request):
-    about_obj = AboutPage.objects.first()
+    about_obj = AboutPage.get_solo()
     return render(request, 'about.html', {
         'about': about_obj,
     })
 
 def connect(request):
-    return render(request, 'connect.html')
+    connect_page = ConnectPage.get_solo()
+    return render(request, 'connect.html', {
+        'connect': connect_page,
+    })
 
 def custom_page(request, slug):
     page = get_object_or_404(CustomPage, slug=slug, is_published=True)

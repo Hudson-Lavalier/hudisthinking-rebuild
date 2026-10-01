@@ -26,5 +26,48 @@ def ensure_superusers():
         status = "Created" if created else "Updated"
         print(f"[{status}] Superuser '{uname}' active with configured password.")
 
+def ensure_content():
+    from core.models import SiteConfiguration, AboutPage, ConnectPage, DBTemplate
+    from pathlib import Path
+    from django.conf import settings
+
+    SiteConfiguration.get_solo()
+    AboutPage.get_solo()
+    ConnectPage.get_solo()
+
+    # Pre-populate DBTemplate catalog from filesystem
+    template_names = [
+        'about.html',
+        'connect.html',
+        'home.html',
+        'custom_page.html',
+        'philosophy/list.html',
+        'philosophy/detail.html',
+        'projects/list.html',
+        'projects/detail.html',
+    ]
+    for t_name in template_names:
+        fs_path = Path(settings.BASE_DIR) / 'templates' / t_name
+        content = ""
+        if fs_path.exists():
+            try:
+                content = fs_path.read_text(encoding='utf-8')
+            except Exception:
+                pass
+        t_obj, created = DBTemplate.objects.get_or_create(
+            name=t_name,
+            defaults={
+                'description': f"Template for {t_name}",
+                'content': content,
+                'is_active': False,
+            }
+        )
+        if not t_obj.content and content:
+            t_obj.content = content
+            t_obj.save()
+    print("[Success] Content singletons and DBTemplate catalog initialized.")
+
 if __name__ == '__main__':
     ensure_superusers()
+    ensure_content()
+

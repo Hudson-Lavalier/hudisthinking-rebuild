@@ -8,15 +8,20 @@
 {% block content %}
 <article class="reader-container connect-overview-container">
   <header class="reader-header text-center">
-    <div class="connect-badge">[COMMUNITY &amp; DIALECTIC PLATFORM]</div>
-    <h1 class="reader-title">HudIsThinking Connect</h1>
-    <p class="section-subtitle">Independent philosophical publishing, live debate scheduling, and peer inquiry.</p>
+    <div class="connect-badge">{{ connect.badge|default:"[COMMUNITY & DIALECTIC PLATFORM]" }}</div>
+    <h1 class="reader-title">
+      {{ connect.title|default:"HudIsThinking Connect" }}
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:core_connectpage_change' connect.pk|default:1 %}" data-admin-title="Edit Connect Page" title="Edit in Live Drawer">[EDIT CONNECT ✎]</button>
+      {% endif %}
+    </h1>
+    <p class="section-subtitle">{{ connect.subtitle|default:"Independent philosophical publishing, live debate scheduling, and peer inquiry." }}</p>
     
     <div class="connect-cta-banner">
-      <a href="https://connect.hudisthinking.com/" target="_blank" rel="noopener noreferrer" class="btn btn-connect-primary">
-        LAUNCH CONNECT &rarr;
+      <a href="{{ connect.cta_url|default:'https://connect.hudisthinking.com/' }}" target="_blank" rel="noopener noreferrer" class="btn btn-connect-primary">
+        {{ connect.cta_label|default:"LAUNCH CONNECT &rarr;" }}
       </a>
-      <span class="connect-destination-label">connect.hudisthinking.com</span>
+      <span class="connect-destination-label">{{ connect.destination_label|default:"connect.hudisthinking.com" }}</span>
     </div>
   </header>
 
@@ -25,46 +30,46 @@
   <section class="connect-pillars-grid">
     <div class="connect-pillar-card">
       <div class="pillar-marker">[01]</div>
-      <h3 class="pillar-title">Publish &amp; Host Philosophy</h3>
+      <h3 class="pillar-title">{{ connect.pillar_1_title|default:"Publish & Host Philosophy" }}</h3>
       <p class="pillar-desc">
-        A dedicated home for independent authors and thinkers to publish formal philosophical works. Retain full authorship over arguments, systematic treatises, logic proofs, and essays within an archive designed for long-form contemplation rather than ephemeral feeds.
+        {{ connect.pillar_1_desc|default:"A dedicated home for independent authors and thinkers to publish formal philosophical works. Retain full authorship over arguments, systematic treatises, logic proofs, and essays within an archive designed for long-form contemplation rather than ephemeral feeds." }}
       </p>
     </div>
 
     <div class="connect-pillar-card">
       <div class="pillar-marker">[02]</div>
-      <h3 class="pillar-title">Schedule Live Debates</h3>
+      <h3 class="pillar-title">{{ connect.pillar_2_title|default:"Schedule Live Debates" }}</h3>
       <p class="pillar-desc">
-        Organize and schedule live, real-time verbal or written debates with other philosophers. Set clear formal theses, establish dialectical constraints, agree on rules of engagement, and hold structured intellectual discourse in front of peers.
+        {{ connect.pillar_2_desc|default:"Organize and schedule live, real-time verbal or written debates with other philosophers. Set clear formal theses, establish dialectical constraints, agree on rules of engagement, and hold structured intellectual discourse in front of peers." }}
       </p>
     </div>
 
     <div class="connect-pillar-card">
       <div class="pillar-marker">[03]</div>
-      <h3 class="pillar-title">Premise &amp; Argument Discussions</h3>
+      <h3 class="pillar-title">{{ connect.pillar_3_title|default:"Premise & Argument Discussions" }}</h3>
       <p class="pillar-desc">
-        Engage deeply with works published by others. Start focused discussion threads dissecting individual premises, formulate rigorous counter-arguments, present counter-examples, and develop collaborative dialectical rebuttals.
+        {{ connect.pillar_3_desc|default:"Engage deeply with works published by others. Start focused discussion threads dissecting individual premises, formulate rigorous counter-arguments, present counter-examples, and develop collaborative dialectical rebuttals." }}
       </p>
     </div>
 
     <div class="connect-pillar-card">
       <div class="pillar-marker">[04]</div>
-      <h3 class="pillar-title">Dialectical Network</h3>
+      <h3 class="pillar-title">{{ connect.pillar_4_title|default:"Dialectical Network" }}</h3>
       <p class="pillar-desc">
-        Connect directly with peers pursuing epistemology, metaphysics, ethics, theology, and philosophical logic. Build an ongoing intellectual record and participate in a community founded on analytical rigor and open inquiry.
+        {{ connect.pillar_4_desc|default:"Connect directly with peers pursuing epistemology, metaphysics, ethics, theology, and philosophical logic. Build an ongoing intellectual record and participate in a community founded on analytical rigor and open inquiry." }}
       </p>
     </div>
   </section>
 
   <section class="connect-callout-panel">
     <div class="connect-callout-inner">
-      <div class="connect-callout-heading">ENTER THE PLATFORM</div>
+      <div class="connect-callout-heading">{{ connect.callout_heading|default:"ENTER THE PLATFORM" }}</div>
       <p class="connect-callout-body">
-        Connect is an external standalone portal within the HudIsThinking ecosystem. Create an account, browse published philosophical treatises, schedule upcoming debates, or publish your own work today.
+        {{ connect.callout_body|default:"Connect is an external standalone portal within the HudIsThinking ecosystem. Create an account, browse published philosophical treatises, schedule upcoming debates, or publish your own work today." }}
       </p>
       <div class="connect-callout-actions">
-        <a href="https://connect.hudisthinking.com/" target="_blank" rel="noopener noreferrer" class="btn btn-connect-primary">
-          VISIT CONNECT.HUDISTHINKING.COM &rarr;
+        <a href="{{ connect.callout_cta_url|default:'https://connect.hudisthinking.com/' }}" target="_blank" rel="noopener noreferrer" class="btn btn-connect-primary">
+          {{ connect.callout_cta_label|default:"VISIT CONNECT.HUDISTHINKING.COM &rarr;" }}
         </a>
       </div>
     </div>
