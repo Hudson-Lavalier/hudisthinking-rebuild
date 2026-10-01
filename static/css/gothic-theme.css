@@ -635,64 +635,26 @@ main.site-content {
 }
 
 /* ==========================================================================
-   Black Hole Void Navigation Transition (~280ms Singularity Collapse)
+   Swup PJAX & Black Hole Void Singularity Transition (~220ms)
    ========================================================================== */
-#void-portal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999999;
-  pointer-events: none;
+.transition-void {
+  transition: opacity 0.22s cubic-bezier(0.7, 0, 0.84, 0),
+              transform 0.22s cubic-bezier(0.7, 0, 0.84, 0),
+              filter 0.22s ease;
+  transform-origin: center 25vh;
 }
 
-.void-portal-idle {
-  display: none;
-}
-
-/* Singularity Collapse on Exit */
-.void-portal-collapsing {
-  display: block;
-  pointer-events: all;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.95) 45%, rgba(0, 0, 0, 0) 100%);
-  animation: void-singularity-collapse 0.28s cubic-bezier(0.7, 0, 0.84, 0) forwards;
-}
-
-@keyframes void-singularity-collapse {
-  0% {
-    opacity: 0;
-    transform: scale(1.6);
-    filter: blur(0px);
-  }
-  40% {
-    opacity: 0.7;
-    filter: blur(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    background-color: #000000;
-    filter: blur(0px);
-  }
+/* Gravitational Singularity Collapse on Exit */
+html.is-animating .transition-void,
+html.is-leaving .transition-void {
+  opacity: 0;
+  transform: scale(0.96) translateY(-8px);
+  filter: blur(4px);
 }
 
 /* Event Horizon Bloom on Entry */
-.void-portal-entering {
-  display: block;
-  pointer-events: none;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 70%, rgba(0, 0, 0, 1) 100%);
-  animation: void-singularity-bloom 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes void-singularity-bloom {
-  0% {
-    opacity: 1;
-    background-color: #000000;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.4);
-    pointer-events: none;
-  }
+html.is-rendering .transition-void {
+  opacity: 0;
+  transform: scale(1.02) translateY(8px);
+  filter: blur(4px);
 }

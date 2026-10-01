@@ -94,7 +94,7 @@
 
   <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
     <a href="{% url 'projects:list' %}" class="btn-secondary">&larr; All Projects</a>
-    <a href="{% url 'admin:projects_project_change' project.id %}" class="btn-secondary">[Edit in Admin]</a>
+    <a href="{% url 'admin:projects_project_change' project.id %}" class="btn-secondary" data-no-swup>[Edit in Admin]</a>
   </div>
 </article>
 {% endblock %}
