@@ -17,6 +17,20 @@ class PhilosophyCategory(models.Model):
         return self.name
 
 
+class PhilosophyTag(models.Model):
+    name = models.CharField(max_length=80, unique=True, help_text="Tag name (e.g. Ethics, Meta-Ethics, Metaphysics, Free Will)")
+    slug = models.SlugField(max_length=80, unique=True, help_text="URL-friendly identifier")
+    description = models.TextField(blank=True, help_text="Short description of the philosophical domain")
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = "Philosophy Tag"
+        verbose_name_plural = "Philosophy Tags"
+
+    def __str__(self):
+        return self.name
+
+
 class Argument(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, help_text="URL-friendly identifier")
@@ -27,6 +41,12 @@ class Argument(models.Model):
         blank=True,
         related_name='arguments',
         help_text="Choose or create categories under Philosophy Categories"
+    )
+    tags = models.ManyToManyField(
+        PhilosophyTag,
+        blank=True,
+        related_name='arguments',
+        help_text="Select or create tags such as Ethics, Meta-Ethics, Metaphysics, Free Will"
     )
     thesis = models.CharField(
         max_length=350,

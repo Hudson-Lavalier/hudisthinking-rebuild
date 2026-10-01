@@ -12,22 +12,49 @@
   </div>
 </div>
 
-<!-- Dynamic Category Filters -->
+<!-- Search Bar -->
+<div class="search-container">
+  <form method="get" action="{% url 'philosophy:list' %}" class="search-form">
+    {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+    {% if current_tag %}<input type="hidden" name="tag" value="{{ current_tag }}">{% endif %}
+    <input type="text" name="q" value="{{ search_query }}" placeholder="Search arguments, premises, tags..." class="search-input" autocomplete="off">
+    <button type="submit" class="search-btn">SEARCH</button>
+    {% if search_query or current_tag or current_category %}
+      <a href="{% url 'philosophy:list' %}" class="search-clear">CLEAR ALL</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Category Filters -->
 <div class="filter-bar">
-  <a href="{% url 'philosophy:list' %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
+  <a href="{% url 'philosophy:list' %}{% if current_tag %}?tag={{ current_tag }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
   {% for cat in categories %}
-    <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
+    <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
       {{ cat.name }}
     </a>
   {% endfor %}
 </div>
 
+<!-- Tag Filters -->
+{% if all_tags %}
+<div class="tags-filter-bar">
+  <span class="tags-label">DOMAINS / TAGS:</span>
+  {% for tag in all_tags %}
+    <a href="{% url 'philosophy:list' %}?tag={{ tag.slug }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" 
+       class="tag-filter-btn {% if current_tag == tag.slug %}active{% endif %}">
+      [{{ tag.name }}]
+    </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Results / Articles -->
 {% if arguments %}
   <div class="card-grid">
     {% for arg in arguments %}
-      <article class="monochrome-card">
+      <article class="monochrome-card event-horizon-card">
         <div class="card-meta">
-          <span class="tag-badge">{% if arg.category %}{{ arg.category.name }}{% else %}General{% endif %}</span>
+          <span class="tag-badge">{{ arg.category.name|default:"General" }}</span>
           <span>{{ arg.published_date|date:"F j, Y" }}</span>
           <span>&bull;</span>
           <span>{{ arg.estimated_read_time }}</span>
@@ -40,12 +67,20 @@
         {% if arg.thesis %}
           <p class="card-body">{{ arg.thesis }}</p>
         {% endif %}
+
+        {% if arg.tags.all %}
+          <div class="card-tags-row">
+            {% for t in arg.tags.all %}
+              <a href="{% url 'philosophy:list' %}?tag={{ t.slug }}" class="card-tag-pill">#{{ t.name }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
       </article>
     {% endfor %}
   </div>
 {% else %}
   <div class="monochrome-card">
-    <p class="card-body">No entries found in this category. You can add writings or create new categories in the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
+    <p class="card-body">No entries found matching your criteria. Try clearing filters or search terms.</p>
   </div>
 {% endif %}
 {% endblock %}

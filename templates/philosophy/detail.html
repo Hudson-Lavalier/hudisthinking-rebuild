@@ -42,6 +42,9 @@
 {% endblock %}
 
 {% block content %}
+<!-- Reading Horizon Progress Line -->
+<div id="reading-progress" class="reading-progress-bar"></div>
+
 <article class="reader-container">
   <div style="margin-bottom: 1.5rem;">
     <a href="{% url 'philosophy:list' %}" style="color: var(--text-muted); font-size: 0.9rem;">&larr; Back to Philosophy Archive</a>
@@ -49,18 +52,26 @@
 
   <header class="reader-header">
     <div class="card-meta">
-      <span class="tag-badge">{% if argument.category %}{{ argument.category.name }}{% else %}General{% endif %}</span>
+      <span class="tag-badge">{{ argument.category.name|default:"General" }}</span>
       <span>Published {{ argument.published_date|date:"F j, Y" }}</span>
       <span>&bull;</span>
       <span>{{ argument.estimated_read_time }}</span>
     </div>
 
-    <h1 class="reader-title">{{ argument.title }}</h1>
+    <h1 class="reader-title typewriter-entrance">{{ argument.title }}</h1>
 
     {% if argument.thesis %}
       <div class="thesis-callout">
         <strong>Core Premise / Thesis:</strong>
         <p>{{ argument.thesis }}</p>
+      </div>
+    {% endif %}
+
+    {% if argument.tags.all %}
+      <div class="card-tags-row" style="margin-top: 1rem;">
+        {% for t in argument.tags.all %}
+          <a href="{% url 'philosophy:list' %}?tag={{ t.slug }}" class="card-tag-pill">#{{ t.name }}</a>
+        {% endfor %}
       </div>
     {% endif %}
   </header>
@@ -69,7 +80,7 @@
     {{ argument.content|markdown }}
   </div>
 
-  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
     <a href="{% url 'philosophy:list' %}" class="btn-secondary">&larr; Archive Index</a>
     <a href="{% url 'admin:philosophy_argument_change' argument.id %}" class="btn-secondary">[Edit in Admin]</a>
   </div>

@@ -35,6 +35,15 @@ class ProjectsTests(TestCase):
         self.assertEqual(filtered_res.status_code, 200)
         self.assertContains(filtered_res, "Void Protocol")
 
+    def test_project_search(self):
+        res = self.client.get(reverse('projects:list') + '?q=Protocol')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "Void Protocol")
+
+        res_none = self.client.get(reverse('projects:list') + '?q=nonexistentproject')
+        self.assertEqual(res_none.status_code, 200)
+        self.assertNotContains(res_none, "Void Protocol")
+
     def test_detail_view(self):
         response = self.client.get(reverse('projects:detail', kwargs={'slug': self.project.slug}))
         self.assertEqual(response.status_code, 200)

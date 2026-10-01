@@ -12,11 +12,23 @@
   </div>
 </div>
 
+<!-- Search Bar -->
+<div class="search-container">
+  <form method="get" action="{% url 'projects:list' %}" class="search-form">
+    {% if current_type %}<input type="hidden" name="type" value="{{ current_type }}">{% endif %}
+    <input type="text" name="q" value="{{ search_query }}" placeholder="Search software builds, binaries, platforms..." class="search-input" autocomplete="off">
+    <button type="submit" class="search-btn">SEARCH</button>
+    {% if search_query or current_type %}
+      <a href="{% url 'projects:list' %}" class="search-clear">CLEAR ALL</a>
+    {% endif %}
+  </form>
+</div>
+
 <!-- Dynamic Category Filters -->
 <div class="filter-bar">
-  <a href="{% url 'projects:list' %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
+  <a href="{% url 'projects:list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
   {% for cat in project_types %}
-    <a href="{% url 'projects:list' %}?type={{ cat.slug }}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
+    <a href="{% url 'projects:list' %}?type={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
       {{ cat.name }}
     </a>
   {% endfor %}
@@ -25,9 +37,9 @@
 {% if projects %}
   <div class="card-grid">
     {% for proj in projects %}
-      <article class="monochrome-card">
+      <article class="monochrome-card event-horizon-card">
         <div class="card-meta">
-          <span class="tag-badge">{% if proj.project_type %}{{ proj.project_type.name }}{% else %}Software{% endif %}</span>
+          <span class="tag-badge">{{ proj.project_type.name|default:"Software" }}</span>
           <span>{{ proj.platform }}</span>
           <span>&bull;</span>
           <span>Version {{ proj.version }}</span>
@@ -54,7 +66,7 @@
   </div>
 {% else %}
   <div class="monochrome-card">
-    <p class="card-body">No projects released in this category yet. You can upload executable builds via the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
+    <p class="card-body">No projects found matching your search. Try clearing filters or search terms.</p>
   </div>
 {% endif %}
 {% endblock %}

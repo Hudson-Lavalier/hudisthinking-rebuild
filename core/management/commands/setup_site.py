@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from philosophy.models import Argument, PhilosophyCategory
+from philosophy.models import Argument, PhilosophyCategory, PhilosophyTag
 from projects.models import Project, ProjectCategory
 from core.models import AboutPage, SiteConfiguration, NavigationItem
 
@@ -70,7 +70,16 @@ class Command(BaseCommand):
             defaults={'name': 'Prototypes', 'order': 3}
         )
 
-        # 5. About Page placeholder
+        # 5. Philosophy Tags
+        tag_ethics, _ = PhilosophyTag.objects.get_or_create(slug='ethics', defaults={'name': 'Ethics'})
+        tag_metaethics, _ = PhilosophyTag.objects.get_or_create(slug='meta-ethics', defaults={'name': 'Meta-Ethics'})
+        tag_metaphysics, _ = PhilosophyTag.objects.get_or_create(slug='metaphysics', defaults={'name': 'Metaphysics'})
+        tag_freewill, _ = PhilosophyTag.objects.get_or_create(slug='free-will', defaults={'name': 'Free Will'})
+        tag_epistemology, _ = PhilosophyTag.objects.get_or_create(slug='epistemology', defaults={'name': 'Epistemology'})
+        tag_mind, _ = PhilosophyTag.objects.get_or_create(slug='philosophy-of-mind', defaults={'name': 'Philosophy of Mind'})
+        tag_logic, _ = PhilosophyTag.objects.get_or_create(slug='logic', defaults={'name': 'Logic'})
+
+        # 6. About Page placeholder
         if not AboutPage.objects.exists():
             AboutPage.objects.create(
                 title="About HudIsThinking LLC",
@@ -79,9 +88,9 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS("Created initial About Page template entry."))
 
-        # 6. Template Philosophy Argument
+        # 7. Template Philosophy Argument
         if not Argument.objects.exists():
-            Argument.objects.create(
+            arg = Argument.objects.create(
                 title="On the Indivisibility of Computational Agency",
                 slug="on-the-indivisibility-of-computational-agency",
                 category=cat_arg,
@@ -104,9 +113,10 @@ Pure syntactic computation does not suffice for genuine agency without external 
                 meta_description="A philosophical inquiry into computational agency and intentionality.",
                 meta_keywords="philosophy, agency, computation, mind"
             )
-            self.stdout.write(self.style.SUCCESS("Created template Philosophy argument entry."))
+            arg.tags.add(tag_mind, tag_metaphysics, tag_freewill)
+            self.stdout.write(self.style.SUCCESS("Created template Philosophy argument entry with tags."))
 
-        # 7. Template Project
+        # 8. Template Project
         if not Project.objects.exists():
             Project.objects.create(
                 title="Core Protocol Prototype",

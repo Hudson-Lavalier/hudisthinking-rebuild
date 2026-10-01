@@ -1,6 +1,7 @@
 /**
  * HudIsThinking - Atmospheric Background Firefly Wisps
- * Monochromatic soft glowing embers drifting organically in the deep black background.
+ * Monochromatic soft glowing embers drifting organically in the deep black background
+ * with Gravitational Cursor Lensing physics.
  * Lightweight, non-intrusive, zero dependencies.
  */
 (function () {
@@ -10,12 +11,29 @@
   const ctx = canvas.getContext('2d');
   let width, height;
   let wisps = [];
-  
+
   // Dynamic configuration from backend SiteConfiguration
   const countAttr = parseInt(canvas.getAttribute('data-count'), 10);
   const speedAttr = parseFloat(canvas.getAttribute('data-speed'));
   const WISP_COUNT = (!isNaN(countAttr) && countAttr > 0) ? countAttr : 16;
   const SPEED_SCALE = (!isNaN(speedAttr) && speedAttr > 0) ? (speedAttr / 0.08) : 1.0;
+
+  // Mouse tracking for Gravitational Cursor Lensing
+  let mouseX = -1000;
+  let mouseY = -1000;
+  let mouseActive = false;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    mouseActive = true;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    mouseActive = false;
+    mouseX = -1000;
+    mouseY = -1000;
+  });
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -58,6 +76,20 @@
       w.wanderAngle += w.wanderSpeed;
       w.x += w.vx + Math.cos(w.wanderAngle) * 0.08;
       w.y += w.vy + Math.sin(w.wanderAngle) * 0.05;
+
+      // Gravitational Cursor Lensing (wisps curve gently around cursor mass)
+      if (mouseActive) {
+        const dx = mouseX - w.x;
+        const dy = mouseY - w.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const GRAVITY_RADIUS = 160;
+        if (dist < GRAVITY_RADIUS && dist > 5) {
+          const force = (1 - dist / GRAVITY_RADIUS) * 0.5;
+          w.x += (dx / dist) * force * 0.45;
+          w.y += (dy / dist) * force * 0.45;
+          w.wanderAngle += 0.03 * force;
+        }
+      }
 
       // Wrap around screen boundaries seamlessly
       if (w.y < -30) {

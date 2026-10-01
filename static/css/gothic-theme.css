@@ -462,3 +462,237 @@ main.site-content {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   Search Bars & Tag Taxonomy UI
+   ========================================================================== */
+.search-container {
+  margin-bottom: 1.5rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.95rem;
+  letter-spacing: 0.04em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.search-btn {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid var(--border-strong);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-btn:hover {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.search-clear {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.5rem;
+}
+
+.search-clear:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Tag filter bar */
+.tags-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.tags-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 0.4rem;
+}
+
+.tag-filter-btn {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.tag-filter-btn:hover,
+.tag-filter-btn.active {
+  color: #ffffff;
+  border-color: #ffffff;
+  background-color: var(--bg-surface-elevated);
+  text-decoration: none;
+}
+
+/* Card tags row */
+.card-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.card-tag-pill {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  padding: 0.1rem 0.4rem;
+  letter-spacing: 0.03em;
+  transition: all 0.15s ease;
+}
+
+.card-tag-pill:hover {
+  color: #ffffff;
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Atmospheric & Magical Interactions
+   ========================================================================== */
+
+/* 1. Event Horizon Card Accretion Disk Glow */
+.event-horizon-card {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.event-horizon-card:hover {
+  border-color: #555555;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.07), inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+/* 2. Reading Horizon Progress Line */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #ffffff;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
+/* 3. Terminal Typewriter Entrance */
+.typewriter-entrance {
+  animation: typewriter-fade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes typewriter-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    letter-spacing: 0.08em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: normal;
+  }
+}
+
+/* ==========================================================================
+   Black Hole Void Navigation Transition (~280ms Singularity Collapse)
+   ========================================================================== */
+#void-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  pointer-events: none;
+}
+
+.void-portal-idle {
+  display: none;
+}
+
+/* Singularity Collapse on Exit */
+.void-portal-collapsing {
+  display: block;
+  pointer-events: all;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.95) 45%, rgba(0, 0, 0, 0) 100%);
+  animation: void-singularity-collapse 0.28s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes void-singularity-collapse {
+  0% {
+    opacity: 0;
+    transform: scale(1.6);
+    filter: blur(0px);
+  }
+  40% {
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    background-color: #000000;
+    filter: blur(0px);
+  }
+}
+
+/* Event Horizon Bloom on Entry */
+.void-portal-entering {
+  display: block;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 70%, rgba(0, 0, 0, 1) 100%);
+  animation: void-singularity-bloom 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes void-singularity-bloom {
+  0% {
+    opacity: 1;
+    background-color: #000000;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+    pointer-events: none;
+  }
+}
