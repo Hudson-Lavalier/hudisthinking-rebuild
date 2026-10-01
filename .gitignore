@@ -20,3 +20,6 @@ staticfiles/
 Thumbs.db
 .vscode/
 .idea/
+
+# SQL dumps
+*.sql
