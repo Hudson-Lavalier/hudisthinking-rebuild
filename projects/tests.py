@@ -30,5 +30,5 @@ class ProjectsTests(TestCase):
         response = self.client.get(reverse('projects:detail', kwargs={'slug': self.project.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "SoftwareApplication")
-        self.assertContains(response, "demo_game.zip")
+        self.assertContains(response, self.project.filename)
         self.assertContains(response, "WASD to move")

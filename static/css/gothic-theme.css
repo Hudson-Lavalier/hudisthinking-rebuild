@@ -50,6 +50,17 @@ a:hover {
   text-underline-offset: 4px;
 }
 
+/* ---------------- Background Firefly Wisps ---------------- */
+#wisp-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ---------------- Layout & Container ---------------- */
 .container {
   max-width: 900px;
@@ -60,7 +71,9 @@ a:hover {
 
 .site-header {
   border-bottom: 1px solid var(--border-subtle);
-  background-color: var(--bg-black);
+  background-color: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 1.75rem 0;
   position: sticky;
   top: 0;
@@ -122,6 +135,8 @@ a:hover {
 main.site-content {
   flex: 1;
   padding: 3.5rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* ---------------- Monochromatic Cards & Sections ---------------- */
@@ -395,6 +410,8 @@ main.site-content {
   color: var(--text-muted);
   font-size: 0.85rem;
   letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-inner {
