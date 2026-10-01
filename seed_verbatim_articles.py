@@ -175,21 +175,5 @@ proj2, created = Project.objects.update_or_create(
 )
 print(f"Seeded: {proj2.title} (Created={created}, Len={len(proj2.description)})")
 
-# Ensure Superusers exist with requested credentials
-from django.contrib.auth import get_user_model
-User = get_user_model()
-admin_pwd = 'bFtv3jkYa6d2drn'
-
-for uname in ['admin', 'hud']:
-    u, _ = User.objects.get_or_create(
-        username=uname,
-        defaults={'is_staff': True, 'is_superuser': True, 'email': 'hudson.amaral11@gmail.com'}
-    )
-    u.is_staff = True
-    u.is_superuser = True
-    u.set_password(admin_pwd)
-    u.save()
-    print(f"Superuser '{uname}' configured with password.")
-
-print("\n--- ALL VERBATIM ARTICLES AND USERS SUCCESSFULLY SEEDED INTO DJANGO! ---")
+print("\n--- ALL VERBATIM ARTICLES SUCCESSFULLY SEEDED INTO DJANGO! ---")
 
