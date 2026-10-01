@@ -13,6 +13,7 @@ __pycache__/
 media/*
 !media/downloads/
 !media/downloads/**
+media/downloads/demo_game*
 
 # Static collection
 staticfiles/
