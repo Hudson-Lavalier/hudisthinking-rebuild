@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+
+{% block title %}{{ project.title }} ({{ project.version }}) | {{ SITE_NAME }}{% endblock %}
+
+{% block meta_description %}{% if project.meta_description %}{{ project.meta_description }}{% else %}{{ project.tagline }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ project.title }} | {{ SITE_NAME }}{% endblock %}
+{% block og_description %}{% if project.meta_description %}{{ project.meta_description }}{% else %}{{ project.tagline }}{% endif %}{% endblock %}
+
+{% block extra_head %}
+<!-- Structured Data (JSON-LD) for SoftwareApplication / Game -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ project.title|escapejs }}",
+  "operatingSystem": "{{ project.platform|escapejs }}",
+  "applicationCategory": "{{ project.get_project_type_display|escapejs }}",
+  "softwareVersion": "{{ project.version|escapejs }}",
+  "description": "{% if project.meta_description %}{{ project.meta_description|escapejs }}{% else %}{{ project.tagline|escapejs }}{% endif %}",
+  {% if project.download_file %}
+  "downloadUrl": "{{ request.scheme }}://{{ request.get_host }}{{ project.download_file.url }}",
+  {% endif %}
+  "author": {
+    "@type": "Organization",
+    "name": "{{ LLC_NAME }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="reader-container">
+  <div style="margin-bottom: 1.5rem;">
+    <a href="{% url 'projects:list' %}" style="color: var(--text-muted); font-size: 0.9rem;">&larr; Back to Projects</a>
+  </div>
+
+  <header class="reader-header">
+    <div class="card-meta">
+      <span class="tag-badge">{{ project.get_project_type_display }}</span>
+      <span>{{ project.platform }}</span>
+      <span>&bull;</span>
+      <span>Version {{ project.version }}</span>
+      <span>&bull;</span>
+      <span>Released {{ project.release_date|date:"F j, Y" }}</span>
+    </div>
+
+    <h1 class="reader-title">{{ project.title }}</h1>
+    <p style="font-size: 1.2rem; color: var(--text-secondary); line-height: 1.5;">{{ project.tagline }}</p>
+  </header>
+
+  <!-- Download Box -->
+  {% if project.download_file %}
+    <div class="download-box">
+      <div class="download-info">
+        <strong class="download-title">{{ project.filename }}</strong>
+        <span class="download-specs">
+          Platform: {{ project.platform }} | Size: {{ project.file_size_display|default:"Ready" }}
+          {% if project.system_requirements %}
+            <br>Requirements: {{ project.system_requirements }}
+          {% endif %}
+        </span>
+      </div>
+      <div>
+        <a href="{{ project.download_file.url }}" class="btn-download" download>
+          Download Executable
+        </a>
+      </div>
+    </div>
+  {% else %}
+    <div class="monochrome-card" style="margin: 1.5rem 0;">
+      <p class="card-body">Downloadable binary package currently pending release.</p>
+    </div>
+  {% endif %}
+
+  <!-- External Links -->
+  {% if project.github_url or project.itch_url %}
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+      {% if project.github_url %}
+        <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub Repository &rarr;</a>
+      {% endif %}
+      {% if project.itch_url %}
+        <a href="{{ project.itch_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary">Itch.io Page &rarr;</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Overview Prose -->
+  <div class="markdown-prose">
+    <h2 style="font-size: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">Overview & Instructions</h2>
+    {{ project.description|markdown }}
+  </div>
+
+  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+    <a href="{% url 'projects:list' %}" class="btn-secondary">&larr; All Projects</a>
+    <a href="{% url 'admin:projects_project_change' project.id %}" class="btn-secondary">[Edit in Admin]</a>
+  </div>
+</article>
+{% endblock %}

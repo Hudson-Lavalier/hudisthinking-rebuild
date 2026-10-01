@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects & Software | {{ SITE_NAME }}{% endblock %}
+
+{% block meta_description %}Downloadable games, packaged executables, and software tools by HudIsThinking.{% endblock %}
+
+{% block content %}
+<div class="section-header">
+  <div>
+    <h1 class="section-title">Projects & Software</h1>
+    <p class="section-subtitle">Downloadable game builds, packaged binaries, and experiments.</p>
+  </div>
+</div>
+
+<!-- Type Filter -->
+<div class="filter-bar">
+  <a href="{% url 'projects:list' %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
+  {% for type_code, type_label in project_types %}
+    <a href="{% url 'projects:list' %}?type={{ type_code }}" class="filter-btn {% if current_type == type_code %}active{% endif %}">
+      {{ type_label }}
+    </a>
+  {% endfor %}
+</div>
+
+{% if projects %}
+  <div class="card-grid">
+    {% for proj in projects %}
+      <article class="monochrome-card">
+        <div class="card-meta">
+          <span class="tag-badge">{{ proj.get_project_type_display }}</span>
+          <span>{{ proj.platform }}</span>
+          <span>&bull;</span>
+          <span>Version {{ proj.version }}</span>
+          <span>&bull;</span>
+          <span>{{ proj.release_date|date:"M Y" }}</span>
+        </div>
+
+        <h2 class="card-title">
+          <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
+        </h2>
+
+        <p class="card-body">{{ proj.tagline }}</p>
+
+        <div style="margin-top: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+          <a href="{{ proj.get_absolute_url }}" class="btn-secondary">Overview & Details</a>
+          {% if proj.download_file %}
+            <a href="{{ proj.download_file.url }}" class="btn-download" download>
+              Download ({{ proj.file_size_display|default:"File" }})
+            </a>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="monochrome-card">
+    <p class="card-body">No projects released in this category yet. You can upload executable builds via the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
+  </div>
+{% endif %}
+{% endblock %}

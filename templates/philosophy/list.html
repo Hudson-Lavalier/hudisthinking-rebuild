@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Philosophy & Arguments | {{ SITE_NAME }}{% endblock %}
+
+{% block meta_description %}Archive of philosophical arguments and writings by HudIsThinking.{% endblock %}
+
+{% block content %}
+<div class="section-header">
+  <div>
+    <h1 class="section-title">Philosophy Archive</h1>
+    <p class="section-subtitle">Catalogued arguments, essays, and critical fragments.</p>
+  </div>
+</div>
+
+<!-- Category Filters -->
+<div class="filter-bar">
+  <a href="{% url 'philosophy:list' %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
+  {% for cat_code, cat_label in categories %}
+    <a href="{% url 'philosophy:list' %}?category={{ cat_code }}" class="filter-btn {% if current_category == cat_code %}active{% endif %}">
+      {{ cat_label }}
+    </a>
+  {% endfor %}
+</div>
+
+{% if arguments %}
+  <div class="card-grid">
+    {% for arg in arguments %}
+      <article class="monochrome-card">
+        <div class="card-meta">
+          <span class="tag-badge">{{ arg.get_category_display }}</span>
+          <span>{{ arg.published_date|date:"F j, Y" }}</span>
+          <span>&bull;</span>
+          <span>{{ arg.estimated_read_time }}</span>
+        </div>
+
+        <h2 class="card-title">
+          <a href="{{ arg.get_absolute_url }}">{{ arg.title }}</a>
+        </h2>
+
+        {% if arg.thesis %}
+          <p class="card-body">{{ arg.thesis }}</p>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="monochrome-card">
+    <p class="card-body">No entries published in this category yet. You can add them through the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
+  </div>
+{% endif %}
+{% endblock %}

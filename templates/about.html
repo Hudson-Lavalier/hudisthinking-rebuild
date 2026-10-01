@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+
+{% block title %}About | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<article class="reader-container">
+  <header class="reader-header">
+    <h1 class="reader-title">About</h1>
+    <p class="section-subtitle">{{ LLC_NAME }}</p>
+  </header>
+
+  <div class="markdown-prose">
+    {% if about and about.content %}
+      {{ about.content|markdown }}
+    {% else %}
+      <p>
+        HudIsThinking LLC.
+      </p>
+      <p>
+        Personal archive of philosophical arguments, written manuscripts, and software works.
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 2rem;">
+        [Section template ready. Content can be added or updated directly in the <a href="{% url 'admin:index' %}">Admin Dashboard</a>.]
+      </p>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ SITE_NAME }} | Personal Archive & Software{% endblock %}
+
+{% block content %}
+<section style="margin-bottom: 3.5rem;">
+  <h1 style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; color: #ffffff;">
+    HudIsThinking
+  </h1>
+  <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6;">
+    Personal archive for philosophical arguments, manuscripts, and software works.
+  </p>
+</section>
+
+<!-- Recent Philosophy -->
+<section style="margin-bottom: 3.5rem;">
+  <div class="section-header">
+    <h2 class="section-title">Philosophy & Arguments</h2>
+    <a href="{% url 'philosophy:list' %}" class="section-subtitle">View All &rarr;</a>
+  </div>
+
+  {% if recent_arguments %}
+    <div class="card-grid">
+      {% for arg in recent_arguments %}
+        <article class="monochrome-card">
+          <div class="card-meta">
+            <span class="tag-badge">{{ arg.get_category_display }}</span>
+            <span>{{ arg.published_date|date:"F j, Y" }}</span>
+            <span>&bull;</span>
+            <span>{{ arg.estimated_read_time }}</span>
+          </div>
+          <h3 class="card-title">
+            <a href="{{ arg.get_absolute_url }}">{{ arg.title }}</a>
+          </h3>
+          {% if arg.thesis %}
+            <p class="card-body">{{ arg.thesis }}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="monochrome-card">
+      <p class="card-body">Archive entries currently being compiled.</p>
+    </div>
+  {% endif %}
+</section>
+
+<!-- Recent Projects / Downloads -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title">Projects & Software</h2>
+    <a href="{% url 'projects:list' %}" class="section-subtitle">View All &rarr;</a>
+  </div>
+
+  {% if recent_projects %}
+    <div class="card-grid">
+      {% for proj in recent_projects %}
+        <article class="monochrome-card">
+          <div class="card-meta">
+            <span class="tag-badge">{{ proj.get_project_type_display }}</span>
+            <span>{{ proj.platform }}</span>
+            <span>&bull;</span>
+            <span>{{ proj.version }}</span>
+          </div>
+          <h3 class="card-title">
+            <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
+          </h3>
+          <p class="card-body">{{ proj.tagline }}</p>
+          {% if proj.download_file %}
+            <div style="margin-top: 1rem;">
+              <a href="{{ proj.get_absolute_url }}" class="btn-download" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                Download ({{ proj.file_size_display|default:"File" }})
+              </a>
+            </div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="monochrome-card">
+      <p class="card-body">Software releases and executable builds will appear here.</p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+
+{% block title %}{{ argument.title }} | {{ SITE_NAME }}{% endblock %}
+
+{% block meta_description %}{% if argument.meta_description %}{{ argument.meta_description }}{% elif argument.thesis %}{{ argument.thesis }}{% else %}{{ argument.title }} by {{ SITE_NAME }}{% endif %}{% endblock %}
+
+{% block meta_keywords %}
+{% if argument.meta_keywords %}
+  <meta name="keywords" content="{{ argument.meta_keywords }}">
+{% endif %}
+{% endblock %}
+
+{% block og_title %}{{ argument.title }}{% endblock %}
+{% block og_description %}{% if argument.meta_description %}{{ argument.meta_description }}{% elif argument.thesis %}{{ argument.thesis }}{% else %}{{ argument.title }}{% endif %}{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block extra_head %}
+<!-- Structured Data (JSON-LD) for Article / Argument -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ argument.title|escapejs }}",
+  "description": "{% if argument.meta_description %}{{ argument.meta_description|escapejs }}{% elif argument.thesis %}{{ argument.thesis|escapejs }}{% else %}{{ argument.title|escapejs }}{% endif %}",
+  "datePublished": "{{ argument.published_date|date:'Y-m-d' }}",
+  "dateModified": "{{ argument.updated_at|date:'c' }}",
+  "author": {
+    "@type": "Organization",
+    "name": "{{ LLC_NAME }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ LLC_NAME }}"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ request.build_absolute_uri }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="reader-container">
+  <div style="margin-bottom: 1.5rem;">
+    <a href="{% url 'philosophy:list' %}" style="color: var(--text-muted); font-size: 0.9rem;">&larr; Back to Philosophy Archive</a>
+  </div>
+
+  <header class="reader-header">
+    <div class="card-meta">
+      <span class="tag-badge">{{ argument.get_category_display }}</span>
+      <span>Published {{ argument.published_date|date:"F j, Y" }}</span>
+      <span>&bull;</span>
+      <span>{{ argument.estimated_read_time }}</span>
+    </div>
+
+    <h1 class="reader-title">{{ argument.title }}</h1>
+
+    {% if argument.thesis %}
+      <div class="thesis-callout">
+        <strong>Core Premise / Thesis:</strong>
+        <p>{{ argument.thesis }}</p>
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="markdown-prose">
+    {{ argument.content|markdown }}
+  </div>
+
+  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+    <a href="{% url 'philosophy:list' %}" class="btn-secondary">&larr; Archive Index</a>
+    <a href="{% url 'admin:philosophy_argument_change' argument.id %}" class="btn-secondary">[Edit in Admin]</a>
+  </div>
+</article>
+{% endblock %}
