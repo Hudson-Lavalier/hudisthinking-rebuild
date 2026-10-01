@@ -68,7 +68,7 @@
   </div>
 
   <header class="site-header">
-    <div class="container header-inner">
+    <div class="container-wide header-inner">
       <a href="{% url 'core:home' %}" class="site-brand">
         <img src="{% if site_config and site_config.logo %}{{ site_config.logo.url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="{{ SITE_NAME }} Logo" class="site-logo">
         <span class="brand-text">{{ SITE_NAME }}</span>
@@ -97,9 +97,9 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <span>&copy; {% now "Y" %} {{ LLC_NAME }}. All rights reserved.</span>
+    <div class="container-wide footer-inner">
+      <div class="footer-copy">
+        &copy; {% now "Y" %} {{ LLC_NAME }}. All rights reserved.
       </div>
       <div class="footer-links">
         {% if footer_nav_items %}
