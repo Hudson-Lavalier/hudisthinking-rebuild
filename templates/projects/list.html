@@ -7,7 +7,12 @@
 {% block content %}
 <div class="section-header">
   <div>
-    <h1 class="section-title">Projects & Software</h1>
+    <h1 class="section-title">
+      Projects & Software
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:projects_project_add' %}" data-admin-title="Create New Project" title="Add Project">[+ NEW PROJECT ✎]</button>
+      {% endif %}
+    </h1>
     <p class="section-subtitle">Downloadable game builds, packaged binaries, and experiments.</p>
   </div>
 </div>
@@ -28,10 +33,18 @@
 <div class="filter-bar">
   <a href="{% url 'projects:list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
   {% for cat in project_types %}
-    <a href="{% url 'projects:list' %}?type={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
-      {{ cat.name }}
-    </a>
+    <span class="hit-live-wrap">
+      <a href="{% url 'projects:list' %}?type={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
+        {{ cat.name }}
+      </a>
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:projects_projectcategory_change' cat.pk %}" data-admin-title="Edit Category: {{ cat.name }}" title="Edit Category">[✎]</button>
+      {% endif %}
+    </span>
   {% endfor %}
+  {% if request.user.is_staff %}
+  <button type="button" class="hit-edit-badge" data-admin-edit="{% url 'admin:projects_projectcategory_add' %}" data-admin-title="Create New Project Category">[+ NEW CAT ✎]</button>
+  {% endif %}
 </div>
 
 {% if projects %}
@@ -48,16 +61,13 @@
         </div>
 
         <h2 class="card-title">
-          <a href="{{ proj.get_absolute_url }}"
-             data-live-model="projects.project"
-             data-live-id="{{ proj.id }}"
-             data-live-field="title">{{ proj.title }}</a>
+          <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
+          {% if request.user.is_staff %}
+          <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:projects_project_change' proj.pk %}" data-admin-title="Edit Project: {{ proj.title }}" title="Edit in Live Drawer">[EDIT ✎]</button>
+          {% endif %}
         </h2>
 
-        <p class="card-body"
-           data-live-model="projects.project"
-           data-live-id="{{ proj.id }}"
-           data-live-field="tagline">{{ proj.tagline }}</p>
+        <p class="card-body">{{ proj.tagline }}</p>
 
         <div style="margin-top: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
           <a href="{{ proj.get_absolute_url }}" class="btn-secondary">Overview & Details</a>

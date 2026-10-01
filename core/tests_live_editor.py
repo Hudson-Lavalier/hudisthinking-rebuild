@@ -117,3 +117,13 @@ class LiveEditorApiTests(TestCase):
         self.assertEqual(res.status_code, 200)
         self.custom_page.refresh_from_db()
         self.assertEqual(self.custom_page.title, 'Live Saved Custom Page Title')
+
+    def test_x_frame_options_header(self):
+        res = self.client.get('/')
+        self.assertEqual(res.headers.get('X-Frame-Options'), 'SAMEORIGIN')
+
+    def test_admin_popup_response_rendered(self):
+        from django.template.loader import render_to_string
+        rendered = render_to_string('admin/popup_response.html', {})
+        self.assertIn("postMessage({ action: 'saved' }, '*')", rendered)
+

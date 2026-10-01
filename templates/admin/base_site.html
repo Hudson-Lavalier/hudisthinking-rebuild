@@ -1,0 +1,128 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:"HIT Admin" }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  /* Monochromatic Gothic Dark Theme for Django Admin Drawer */
+  :root {
+    --primary: #ffffff;
+    --secondary: #222222;
+    --accent: #ffffff;
+    --primary-fg: #000000;
+    --body-fg: #e0e0e0;
+    --body-bg: #000000;
+    --body-quiet-color: #888888;
+    --body-loud-color: #ffffff;
+    --header-color: #ffffff;
+    --header-branding-color: #ffffff;
+    --header-bg: #000000;
+    --darkened-bg: #0d0d0d;
+    --selected-bg: #1a1a1a;
+    --selected-row: #141414;
+    --close-button-bg: #444444;
+    --close-button-hover-bg: #666666;
+    --border-color: #2b2b2b;
+    --font-family-primary: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+  }
+
+  body {
+    background-color: #000000 !important;
+    color: #e0e0e0 !important;
+    font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+    font-size: 13px !important;
+  }
+
+  #header {
+    background: #000000 !important;
+    border-bottom: 1px solid #333333 !important;
+    color: #ffffff !important;
+  }
+
+  #branding h1 {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+  }
+
+  .module {
+    background: #080808 !important;
+    border: 1px solid #222222 !important;
+  }
+
+  .module caption, .module h2 {
+    background: #111111 !important;
+    color: #ffffff !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid #333333 !important;
+  }
+
+  input[type="text"], input[type="password"], input[type="email"], input[type="url"],
+  input[type="number"], input[type="file"], textarea, select {
+    background: #0d0d0d !important;
+    border: 1px solid #333333 !important;
+    color: #ffffff !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding: 6px 10px !important;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: #ffffff !important;
+    outline: none !important;
+  }
+
+  .submit-row {
+    background: #050505 !important;
+    border-top: 1px solid #222222 !important;
+    padding: 12px 16px !important;
+  }
+
+  .submit-row input[type="submit"], .button, input[type="submit"] {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ffffff !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+    transition: background-color 0.15s ease !important;
+  }
+
+  .submit-row input[type="submit"]:hover, .button:hover {
+    background: #cccccc !important;
+    color: #000000 !important;
+  }
+
+  .submit-row .deletelink {
+    background: transparent !important;
+    border: 1px solid #ff3333 !important;
+    color: #ff3333 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    text-transform: uppercase !important;
+    padding: 7px 12px !important;
+  }
+
+  .breadcrumbs {
+    background: #000000 !important;
+    border-bottom: 1px solid #222222 !important;
+    color: #666666 !important;
+  }
+
+  .breadcrumbs a {
+    color: #aaaaaa !important;
+  }
+
+  /* When rendered inside popup iframe, ensure clean full-bleed layout */
+  body.popup {
+    padding: 15px !important;
+  }
+</style>
+{% endblock %}

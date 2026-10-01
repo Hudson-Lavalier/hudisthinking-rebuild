@@ -5,16 +5,13 @@
 
 {% block content %}
 <section style="margin-bottom: 3.5rem;">
-  <h1 style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; color: #ffffff;"
-      data-live-model="core.siteconfiguration"
-      data-live-id="1"
-      data-live-field="site_title">
+  <h1 style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; color: #ffffff;">
     {{ SITE_NAME }}
+    {% if request.user.is_staff %}
+    <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:core_siteconfiguration_change' 1 %}" data-admin-title="Site Identity & Branding" title="Edit Site Config">[EDIT BRANDING ✎]</button>
+    {% endif %}
   </h1>
-  <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6;"
-     data-live-model="core.siteconfiguration"
-     data-live-id="1"
-     data-live-field="tagline">
+  <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 700px; line-height: 1.6;">
     {{ SITE_DESCRIPTION }}
   </p>
 </section>
@@ -38,6 +35,9 @@
           </div>
           <h3 class="card-title">
             <a href="{{ arg.get_absolute_url }}">{{ arg.title }}</a>
+            {% if request.user.is_staff %}
+            <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_argument_change' arg.pk %}" data-admin-title="Edit Argument: {{ arg.title }}" title="Edit in Live Drawer">[EDIT ✎]</button>
+            {% endif %}
           </h3>
           {% if arg.thesis %}
             <p class="card-body">{{ arg.thesis }}</p>
@@ -71,6 +71,9 @@
           </div>
           <h3 class="card-title">
             <a href="{{ proj.get_absolute_url }}">{{ proj.title }}</a>
+            {% if request.user.is_staff %}
+            <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:projects_project_change' proj.pk %}" data-admin-title="Edit Project: {{ proj.title }}" title="Edit in Live Drawer">[EDIT ✎]</button>
+            {% endif %}
           </h3>
           <p class="card-body">{{ proj.tagline }}</p>
           {% if proj.download_file and proj.show_download_button %}

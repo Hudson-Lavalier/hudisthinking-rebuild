@@ -11,10 +11,12 @@
 {% block content %}
 <article class="reader-container">
   <header class="reader-header">
-    <h1 class="reader-title"
-        data-live-model="core.custompage"
-        data-live-id="{{ page.id }}"
-        data-live-field="title">{{ page.title }}</h1>
+    <h1 class="reader-title">
+      {{ page.title }}
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:core_custompage_change' page.pk %}" data-admin-title="Edit Page: {{ page.title }}" title="Edit in Live Drawer">[EDIT PAGE ✎]</button>
+      {% endif %}
+    </h1>
     {% if page.featured_image and page.show_featured_image %}
       <div class="featured-media-frame">
         <img src="{{ page.featured_image.url }}" alt="{{ page.title }}" class="featured-media-img">
@@ -22,12 +24,7 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose"
-       data-live-model="core.custompage"
-       data-live-id="{{ page.id }}"
-       data-live-field="content"
-       data-live-format="markdown"
-       data-live-raw="{{ page.content|escape }}">
+  <div class="markdown-prose">
     {{ page.content|markdown }}
   </div>
 

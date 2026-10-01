@@ -1,0 +1,272 @@
+/* ==========================================================================
+   HudIsThinking - Offcanvas Django Admin Live Drawer & HUD
+   Monochromatic Gothic Theme / JetBrains Mono
+   Strict zero-emoji design
+   ========================================================================== */
+
+/* Bottom body clearance so HUD never covers footer links */
+body.hit-staff-active {
+  padding-bottom: 55px;
+}
+
+/* --------------------------------------------------------------------------
+   Offcanvas Drawer & Backdrop
+   -------------------------------------------------------------------------- */
+.hit-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 10001;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.hit-drawer-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hit-admin-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 720px;
+  max-width: 95vw;
+  height: 100vh;
+  background-color: #000000;
+  border-left: 1px solid #333333;
+  z-index: 10002;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.95);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.hit-admin-drawer.is-open {
+  transform: translateX(0);
+}
+
+.hit-drawer-header {
+  padding: 0.85rem 1.25rem;
+  background: #080808;
+  border-bottom: 1px solid #282828;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hit-drawer-title {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hit-drawer-close {
+  background: transparent;
+  color: #aaaaaa;
+  border: 1px solid #333333;
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.15s ease;
+}
+
+.hit-drawer-close:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.hit-drawer-body {
+  flex: 1;
+  overflow: hidden;
+  background: #000000;
+  position: relative;
+}
+
+.hit-admin-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #000000;
+}
+
+/* --------------------------------------------------------------------------
+   Staff Edit Trigger Badges & Wrappers
+   -------------------------------------------------------------------------- */
+.hit-edit-trigger,
+.hit-edit-badge {
+  display: none;
+}
+
+body.hit-editing-active .hit-edit-trigger,
+body.hit-editing-active .hit-edit-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #555555;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  vertical-align: middle;
+  margin-left: 0.45rem;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+body.hit-editing-active .hit-edit-trigger:hover,
+body.hit-editing-active .hit-edit-badge:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  text-decoration: none;
+}
+
+body.hit-editing-active .hit-live-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Floating HUD Bar & Minimized Bubble
+   -------------------------------------------------------------------------- */
+.hit-live-hud {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000000;
+  border-top: 1px solid #333333;
+  padding: 0.65rem 1.5rem;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.85);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hit-live-hud.is-collapsed {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.hit-hud-min-bubble {
+  position: fixed;
+  bottom: 1rem;
+  right: 1.5rem;
+  z-index: 9999;
+  background-color: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+  transition: all 0.15s ease;
+}
+
+.hit-hud-min-bubble:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.hit-hud-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hit-hud-brand {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  border-right: 1px solid #333333;
+  padding-right: 1.25rem;
+}
+
+.hit-hud-user {
+  font-size: 0.78rem;
+  color: #00ff66;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hit-hud-status {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #444444;
+  background: #0a0a0a;
+  color: #888888;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.hit-hud-status.is-synced {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.hit-hud-status.is-active {
+  border-color: #00ff66;
+  color: #00ff66;
+}
+
+.hit-hud-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hit-hud-btn {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #444444;
+  padding: 0.35rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hit-hud-btn:hover {
+  border-color: #ffffff;
+  background-color: #121212;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.hit-hud-btn.btn-active-toggle {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 700;
+}

@@ -7,7 +7,13 @@
 {% block content %}
 <div class="section-header">
   <div>
-    <h1 class="section-title">Philosophy Archive</h1>
+    <h1 class="section-title">
+      Philosophy Archive
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:core_siteconfiguration_change' 1 %}" data-admin-title="Site & Archive Branding" title="Edit Site Config">[EDIT ARCHIVE ✎]</button>
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_argument_add' %}" data-admin-title="Create New Argument" title="Add Argument">[+ NEW ARGUMENT ✎]</button>
+      {% endif %}
+    </h1>
     <p class="section-subtitle">Catalogued arguments, essays, and critical fragments.</p>
   </div>
 </div>
@@ -29,10 +35,18 @@
 <div class="filter-bar">
   <a href="{% url 'philosophy:list' %}{% if current_tag %}?tag={{ current_tag }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
   {% for cat in categories %}
-    <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
-      {{ cat.name }}
-    </a>
+    <span class="hit-live-wrap">
+      <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
+        {{ cat.name }}
+      </a>
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_philosophycategory_change' cat.pk %}" data-admin-title="Edit Category: {{ cat.name }}" title="Edit Category">[✎]</button>
+      {% endif %}
+    </span>
   {% endfor %}
+  {% if request.user.is_staff %}
+  <button type="button" class="hit-edit-badge" data-admin-edit="{% url 'admin:philosophy_philosophycategory_add' %}" data-admin-title="Create New Category">[+ NEW CAT ✎]</button>
+  {% endif %}
 </div>
 
 <!-- Tag Filters -->
@@ -40,11 +54,19 @@
 <div class="tags-filter-bar">
   <span class="tags-label">DOMAINS / TAGS:</span>
   {% for tag in all_tags %}
-    <a href="{% url 'philosophy:list' %}?tag={{ tag.slug }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" 
-       class="tag-filter-btn {% if current_tag == tag.slug %}active{% endif %}">
-      [{{ tag.name }}]
-    </a>
+    <span class="hit-live-wrap">
+      <a href="{% url 'philosophy:list' %}?tag={{ tag.slug }}{% if current_category %}&category={{ current_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" 
+         class="tag-filter-btn {% if current_tag == tag.slug %}active{% endif %}">
+        [{{ tag.name }}]
+      </a>
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_philosophytag_change' tag.pk %}" data-admin-title="Edit Tag: {{ tag.name }}" title="Edit Tag">[✎]</button>
+      {% endif %}
+    </span>
   {% endfor %}
+  {% if request.user.is_staff %}
+  <button type="button" class="hit-edit-badge" data-admin-edit="{% url 'admin:philosophy_philosophytag_add' %}" data-admin-title="Create New Tag">[+ NEW TAG ✎]</button>
+  {% endif %}
 </div>
 {% endif %}
 
@@ -61,17 +83,14 @@
         </div>
 
         <h2 class="card-title">
-          <a href="{{ arg.get_absolute_url }}"
-             data-live-model="philosophy.argument"
-             data-live-id="{{ arg.id }}"
-             data-live-field="title">{{ arg.title }}</a>
+          <a href="{{ arg.get_absolute_url }}">{{ arg.title }}</a>
+          {% if request.user.is_staff %}
+          <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_argument_change' arg.pk %}" data-admin-title="Edit Argument: {{ arg.title }}" title="Edit in Live Drawer">[EDIT ✎]</button>
+          {% endif %}
         </h2>
 
         {% if arg.thesis %}
-          <p class="card-body"
-             data-live-model="philosophy.argument"
-             data-live-id="{{ arg.id }}"
-             data-live-field="thesis">{{ arg.thesis }}</p>
+          <p class="card-body">{{ arg.thesis }}</p>
         {% endif %}
 
         {% if arg.tags.all %}

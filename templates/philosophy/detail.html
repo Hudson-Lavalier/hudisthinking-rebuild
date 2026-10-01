@@ -58,10 +58,12 @@
       <span>{{ argument.estimated_read_time }}</span>
     </div>
 
-    <h1 class="reader-title typewriter-entrance"
-        data-live-model="philosophy.argument"
-        data-live-id="{{ argument.id }}"
-        data-live-field="title">{{ argument.title }}</h1>
+    <h1 class="reader-title typewriter-entrance">
+      {{ argument.title }}
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:philosophy_argument_change' argument.pk %}" data-admin-title="Edit Argument: {{ argument.title }}" title="Edit in Live Drawer">[EDIT ARTICLE ✎]</button>
+      {% endif %}
+    </h1>
 
     {% if argument.featured_image and argument.show_featured_image %}
       <div class="featured-media-frame">
@@ -72,9 +74,7 @@
     {% if argument.thesis %}
       <div class="thesis-callout">
         <strong>Core Premise / Thesis:</strong>
-        <p data-live-model="philosophy.argument"
-           data-live-id="{{ argument.id }}"
-           data-live-field="thesis">{{ argument.thesis }}</p>
+        <p>{{ argument.thesis }}</p>
       </div>
     {% endif %}
 
@@ -87,12 +87,7 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose"
-       data-live-model="philosophy.argument"
-       data-live-id="{{ argument.id }}"
-       data-live-field="content"
-       data-live-format="markdown"
-       data-live-raw="{{ argument.content|escape }}">
+  <div class="markdown-prose">
     {{ argument.content|markdown }}
   </div>
 

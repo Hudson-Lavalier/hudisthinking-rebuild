@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     linkSelector: 'a[href^="/"]:not([data-no-swup]):not([download]):not([target="_blank"])',
   });
 
+  window.swup = swup;
+
   // Re-initialization function called on initial load and every PJAX swap
   function initPageFeatures() {
     // 1. Reading Horizon Progress Line

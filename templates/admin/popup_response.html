@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Saved</title>
+</head>
+<body style="background: #000000; color: #ffffff; font-family: monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <p>[CHANGES PERSISTED - REFRESHING VIEW...]</p>
+  <script>
+    (function() {
+      // Unconditionally notify parent window that change was saved
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ action: 'saved' }, '*');
+      }
+      // If opened in a traditional popup window, close cleanly
+      if (window.opener && window.opener !== window) {
+        try {
+          window.opener.postMessage({ action: 'saved' }, '*');
+        } catch (e) {}
+        window.close();
+      }
+    })();
+  </script>
+</body>
+</html>

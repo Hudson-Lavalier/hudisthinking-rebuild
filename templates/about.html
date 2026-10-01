@@ -6,10 +6,12 @@
 {% block content %}
 <article class="reader-container">
   <header class="reader-header">
-    <h1 class="reader-title"
-        data-live-model="core.aboutpage"
-        data-live-id="{{ about.id|default:1 }}"
-        data-live-field="title">{{ about.title|default:"About" }}</h1>
+    <h1 class="reader-title">
+      {{ about.title|default:"About" }}
+      {% if request.user.is_staff %}
+      <button type="button" class="hit-edit-trigger" data-admin-edit="{% url 'admin:core_aboutpage_change' about.pk|default:1 %}" data-admin-title="Edit About Page" title="Edit in Live Drawer">[EDIT ABOUT ✎]</button>
+      {% endif %}
+    </h1>
     <p class="section-subtitle">{{ LLC_NAME }}</p>
     {% if about and about.featured_image and about.show_featured_image %}
       <div class="featured-media-frame">
@@ -18,12 +20,7 @@
     {% endif %}
   </header>
 
-  <div class="markdown-prose"
-       data-live-model="core.aboutpage"
-       data-live-id="{{ about.id|default:1 }}"
-       data-live-field="content"
-       data-live-format="markdown"
-       data-live-raw="{{ about.content|default:'Personal archive of philosophical arguments, written manuscripts, and software works.'|escape }}">
+  <div class="markdown-prose">
     {% if about and about.content %}
       {{ about.content|markdown }}
     {% else %}
