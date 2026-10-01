@@ -1,15 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Argument
+from .models import Argument, PhilosophyCategory
 
 def argument_list(request):
-    category = request.GET.get('category', '').strip()
-    arguments = Argument.objects.filter(is_published=True)
-    if category:
-        arguments = arguments.filter(category=category)
+    category_slug = request.GET.get('category', '').strip()
+    categories = PhilosophyCategory.objects.all().order_by('order', 'name')
+    arguments = Argument.objects.filter(is_published=True).select_related('category')
+    if category_slug:
+        arguments = arguments.filter(category__slug=category_slug)
     return render(request, 'philosophy/list.html', {
         'arguments': arguments,
-        'current_category': category,
-        'categories': Argument.CATEGORY_CHOICES,
+        'current_category': category_slug,
+        'categories': categories,
     })
 
 def argument_detail(request, slug):

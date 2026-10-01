@@ -3,17 +3,33 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-class Project(models.Model):
-    PROJECT_TYPES = [
-        ('game', 'Game'),
-        ('executable', 'Packaged Executable'),
-        ('tool', 'Software Tool'),
-        ('experiment', 'Experimental Prototype'),
-    ]
+class ProjectCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True, help_text="Category name (e.g. 'Games', 'Executables', 'Tools')")
+    slug = models.SlugField(max_length=100, unique=True, help_text="URL-friendly identifier")
+    description = models.TextField(blank=True, help_text="Short description of this category")
+    icon = models.CharField(max_length=50, blank=True, help_text="Optional icon glyph, badge symbol, or emoji")
+    order = models.PositiveIntegerField(default=0, help_text="Sort order on project tabs")
 
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Project Category"
+        verbose_name_plural = "Project Categories"
+
+    def __str__(self):
+        return f"{self.icon + ' ' if self.icon else ''}{self.name}"
+
+
+class Project(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, help_text="URL-friendly identifier")
-    project_type = models.CharField(max_length=50, choices=PROJECT_TYPES, default='game')
+    project_type = models.ForeignKey(
+        ProjectCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='projects',
+        help_text="Choose or create categories under Project Categories"
+    )
     tagline = models.CharField(
         max_length=300,
         help_text="One-line summary for listing cards."
@@ -58,7 +74,8 @@ class Project(models.Model):
         verbose_name_plural = "Projects & Downloads"
 
     def __str__(self):
-        return f"[{self.get_project_type_display()}] {self.title} ({self.version})"
+        cat_name = self.project_type.name if self.project_type else "Uncategorized"
+        return f"[{cat_name}] {self.title} ({self.version})"
 
     def get_absolute_url(self):
         return reverse('projects:detail', kwargs={'slug': self.slug})

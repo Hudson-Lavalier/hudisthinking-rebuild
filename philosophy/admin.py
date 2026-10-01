@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Argument
+from .models import Argument, PhilosophyCategory
+
+@admin.register(PhilosophyCategory)
+class PhilosophyCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'icon', 'order')
+    list_editable = ('order',)
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name', 'description')
+
 
 @admin.register(Argument)
 class ArgumentAdmin(admin.ModelAdmin):

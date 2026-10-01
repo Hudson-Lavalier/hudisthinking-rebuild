@@ -10,7 +10,12 @@
   const ctx = canvas.getContext('2d');
   let width, height;
   let wisps = [];
-  const WISP_COUNT = 16; // Sparsely distributed, calm and non-distracting
+  
+  // Dynamic configuration from backend SiteConfiguration
+  const countAttr = parseInt(canvas.getAttribute('data-count'), 10);
+  const speedAttr = parseFloat(canvas.getAttribute('data-speed'));
+  const WISP_COUNT = (!isNaN(countAttr) && countAttr > 0) ? countAttr : 16;
+  const SPEED_SCALE = (!isNaN(speedAttr) && speedAttr > 0) ? (speedAttr / 0.08) : 1.0;
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -21,15 +26,15 @@
     return {
       x: Math.random() * (width || window.innerWidth),
       y: Math.random() * (height || window.innerHeight),
-      vx: (Math.random() - 0.5) * 0.08, // Very subtle horizontal drift
-      vy: -0.03 - Math.random() * 0.07, // Slow, lazy upward drift
+      vx: ((Math.random() - 0.5) * 0.08) * SPEED_SCALE, // Scale horizontal drift
+      vy: (-0.03 - Math.random() * 0.07) * SPEED_SCALE, // Scale upward drift
       radius: 1.0 + Math.random() * 1.8,
       glowRadius: 10 + Math.random() * 18,
       baseAlpha: 0.12 + Math.random() * 0.48,
       pulseSpeed: 0.003 + Math.random() * 0.005, // Slow, hypnotic breathing
       pulseOffset: Math.random() * Math.PI * 2,
       wanderAngle: Math.random() * Math.PI * 2,
-      wanderSpeed: 0.002 + Math.random() * 0.004,
+      wanderSpeed: (0.002 + Math.random() * 0.004) * SPEED_SCALE,
     };
   }
 

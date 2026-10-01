@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Project
+from .models import Project, ProjectCategory
+
+@admin.register(ProjectCategory)
+class ProjectCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'icon', 'order')
+    list_editable = ('order',)
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name', 'description')
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):

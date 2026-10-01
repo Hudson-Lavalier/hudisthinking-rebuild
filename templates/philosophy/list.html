@@ -12,12 +12,12 @@
   </div>
 </div>
 
-<!-- Category Filters -->
+<!-- Dynamic Category Filters -->
 <div class="filter-bar">
   <a href="{% url 'philosophy:list' %}" class="filter-btn {% if not current_category %}active{% endif %}">All Works</a>
-  {% for cat_code, cat_label in categories %}
-    <a href="{% url 'philosophy:list' %}?category={{ cat_code }}" class="filter-btn {% if current_category == cat_code %}active{% endif %}">
-      {{ cat_label }}
+  {% for cat in categories %}
+    <a href="{% url 'philosophy:list' %}?category={{ cat.slug }}" class="filter-btn {% if current_category == cat.slug %}active{% endif %}">
+      {% if cat.icon %}{{ cat.icon }} {% endif %}{{ cat.name }}
     </a>
   {% endfor %}
 </div>
@@ -27,7 +27,7 @@
     {% for arg in arguments %}
       <article class="monochrome-card">
         <div class="card-meta">
-          <span class="tag-badge">{{ arg.get_category_display }}</span>
+          <span class="tag-badge">{% if arg.category %}{% if arg.category.icon %}{{ arg.category.icon }} {% endif %}{{ arg.category.name }}{% else %}General{% endif %}</span>
           <span>{{ arg.published_date|date:"F j, Y" }}</span>
           <span>&bull;</span>
           <span>{{ arg.estimated_read_time }}</span>
@@ -45,7 +45,7 @@
   </div>
 {% else %}
   <div class="monochrome-card">
-    <p class="card-body">No entries published in this category yet. You can add them through the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
+    <p class="card-body">No entries found in this category. You can add writings or create new categories in the <a href="{% url 'admin:index' %}">admin dashboard</a>.</p>
   </div>
 {% endif %}
 {% endblock %}

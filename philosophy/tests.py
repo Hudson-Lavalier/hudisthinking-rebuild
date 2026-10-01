@@ -1,14 +1,19 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Argument
+from .models import Argument, PhilosophyCategory
 
 class PhilosophyTests(TestCase):
     def setUp(self):
         self.client = Client()
+        self.category = PhilosophyCategory.objects.create(
+            name="Metaphysics",
+            slug="metaphysics",
+            icon="🌌"
+        )
         self.argument = Argument.objects.create(
             title="On the Bounds of Computational Perception",
             slug="on-the-bounds-of-computational-perception",
-            category="argument",
+            category=self.category,
             thesis="Perception requires an observer bound by thermodynamic constraints.",
             content="## Premise 1\nAny system that perceives must expend energy.\n\n## Conclusion\nUnbounded awareness is non-physical."
         )
@@ -16,10 +21,15 @@ class PhilosophyTests(TestCase):
     def test_argument_str(self):
         self.assertIn("On the Bounds of Computational Perception", str(self.argument))
 
-    def test_list_view(self):
+    def test_list_view_and_filtering(self):
         response = self.client.get(reverse('philosophy:list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "On the Bounds of Computational Perception")
+        self.assertContains(response, "Metaphysics")
+
+        filtered_res = self.client.get(reverse('philosophy:list') + '?category=metaphysics')
+        self.assertEqual(filtered_res.status_code, 200)
+        self.assertContains(filtered_res, "On the Bounds of Computational Perception")
 
     def test_detail_view(self):
         response = self.client.get(reverse('philosophy:detail', kwargs={'slug': self.argument.slug}))

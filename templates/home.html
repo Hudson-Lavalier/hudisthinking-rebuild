@@ -25,7 +25,7 @@
       {% for arg in recent_arguments %}
         <article class="monochrome-card">
           <div class="card-meta">
-            <span class="tag-badge">{{ arg.get_category_display }}</span>
+            <span class="tag-badge">{% if arg.category %}{% if arg.category.icon %}{{ arg.category.icon }} {% endif %}{{ arg.category.name }}{% else %}General{% endif %}</span>
             <span>{{ arg.published_date|date:"F j, Y" }}</span>
             <span>&bull;</span>
             <span>{{ arg.estimated_read_time }}</span>
@@ -58,7 +58,7 @@
       {% for proj in recent_projects %}
         <article class="monochrome-card">
           <div class="card-meta">
-            <span class="tag-badge">{{ proj.get_project_type_display }}</span>
+            <span class="tag-badge">{% if proj.project_type %}{% if proj.project_type.icon %}{{ proj.project_type.icon }} {% endif %}{{ proj.project_type.name }}{% else %}Software{% endif %}</span>
             <span>{{ proj.platform }}</span>
             <span>&bull;</span>
             <span>{{ proj.version }}</span>

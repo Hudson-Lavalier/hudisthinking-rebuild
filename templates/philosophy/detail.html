@@ -49,7 +49,7 @@
 
   <header class="reader-header">
     <div class="card-meta">
-      <span class="tag-badge">{{ argument.get_category_display }}</span>
+      <span class="tag-badge">{% if argument.category %}{% if argument.category.icon %}{{ argument.category.icon }} {% endif %}{{ argument.category.name }}{% else %}General{% endif %}</span>
       <span>Published {{ argument.published_date|date:"F j, Y" }}</span>
       <span>&bull;</span>
       <span>{{ argument.estimated_read_time }}</span>

@@ -1,19 +1,76 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from philosophy.models import Argument
-from projects.models import Project
-from core.models import AboutPage
+from philosophy.models import Argument, PhilosophyCategory
+from projects.models import Project, ProjectCategory
+from core.models import AboutPage, SiteConfiguration, NavigationItem
 
 class Command(BaseCommand):
-    help = "Populate initial template entries and default admin user if needed"
+    help = "Populate initial template entries, site configuration, categories, and default navigation"
 
     def handle(self, *args, **options):
         User = get_user_model()
         if not User.objects.filter(is_superuser=True).exists():
-            User.objects.create_superuser('admin', 'admin@hudisthinking.com', 'adminpass123')
-            self.stdout.write(self.style.SUCCESS("Superuser created: username 'admin' | password 'adminpass123' (Remember to change password)"))
+            User.objects.create_superuser('hud', 'hud@hudisthinking.com', 'hd63^7387^#hGTe66URJ2*73917HG41284A')
+            self.stdout.write(self.style.SUCCESS("Superuser 'hud' created."))
 
-        # Initial About Page placeholder
+        # 1. Site Configuration
+        config, created = SiteConfiguration.objects.get_or_create(id=1, defaults={
+            'site_title': 'HudIsThinking',
+            'llc_name': 'HudIsThinking LLC',
+            'tagline': 'Personal archive of philosophical arguments and software works.',
+            'enable_wisps': True,
+            'wisp_count': 16,
+            'wisp_speed': 0.08,
+        })
+        if created:
+            self.stdout.write(self.style.SUCCESS("Initialized Site Configuration."))
+
+        # 2. Navigation Items
+        default_nav = [
+            ('Philosophy', '/philosophy/', 'header', 1),
+            ('Projects', '/projects/', 'header', 2),
+            ('About', '/about/', 'header', 3),
+            ('Home', '/', 'footer', 1),
+            ('Philosophy', '/philosophy/', 'footer', 2),
+            ('Projects', '/projects/', 'footer', 3),
+            ('About', '/about/', 'footer', 4),
+        ]
+        for label, url, loc, order in default_nav:
+            NavigationItem.objects.get_or_create(
+                label=label, location=loc,
+                defaults={'url': url, 'order': order, 'is_active': True}
+            )
+        self.stdout.write(self.style.SUCCESS("Initialized default navigation items."))
+
+        # 3. Philosophy Categories
+        cat_arg, _ = PhilosophyCategory.objects.get_or_create(
+            slug='arguments',
+            defaults={'name': 'Arguments', 'icon': '⚔', 'order': 1}
+        )
+        cat_essay, _ = PhilosophyCategory.objects.get_or_create(
+            slug='essays',
+            defaults={'name': 'Essays', 'icon': '📜', 'order': 2}
+        )
+        cat_frag, _ = PhilosophyCategory.objects.get_or_create(
+            slug='fragments',
+            defaults={'name': 'Fragments', 'icon': '✦', 'order': 3}
+        )
+
+        # 4. Project Categories
+        type_game, _ = ProjectCategory.objects.get_or_create(
+            slug='games',
+            defaults={'name': 'Games', 'icon': '🎮', 'order': 1}
+        )
+        type_exe, _ = ProjectCategory.objects.get_or_create(
+            slug='executables',
+            defaults={'name': 'Executables', 'icon': '📦', 'order': 2}
+        )
+        type_proto, _ = ProjectCategory.objects.get_or_create(
+            slug='prototypes',
+            defaults={'name': 'Prototypes', 'icon': '⚙', 'order': 3}
+        )
+
+        # 5. About Page placeholder
         if not AboutPage.objects.exists():
             AboutPage.objects.create(
                 title="About HudIsThinking LLC",
@@ -22,12 +79,12 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS("Created initial About Page template entry."))
 
-        # Template Philosophy Argument
+        # 6. Template Philosophy Argument
         if not Argument.objects.exists():
             Argument.objects.create(
                 title="On the Indivisibility of Computational Agency",
                 slug="on-the-indivisibility-of-computational-agency",
-                category="argument",
+                category=cat_arg,
                 thesis="Agency cannot be decomposed into passive algorithmic steps without discarding intentionality.",
                 content="""## Proposition I
 
@@ -49,12 +106,12 @@ Pure syntactic computation does not suffice for genuine agency without external 
             )
             self.stdout.write(self.style.SUCCESS("Created template Philosophy argument entry."))
 
-        # Template Project
+        # 7. Template Project
         if not Project.objects.exists():
             Project.objects.create(
                 title="Core Protocol Prototype",
                 slug="core-protocol-prototype",
-                project_type="game",
+                project_type=type_game,
                 tagline="Experimental standalone interactive software build.",
                 description="""### Overview
 Experimental build exploring minimalist mechanics and systems.

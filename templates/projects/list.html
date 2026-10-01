@@ -12,12 +12,12 @@
   </div>
 </div>
 
-<!-- Type Filter -->
+<!-- Dynamic Category Filters -->
 <div class="filter-bar">
   <a href="{% url 'projects:list' %}" class="filter-btn {% if not current_type %}active{% endif %}">All Projects</a>
-  {% for type_code, type_label in project_types %}
-    <a href="{% url 'projects:list' %}?type={{ type_code }}" class="filter-btn {% if current_type == type_code %}active{% endif %}">
-      {{ type_label }}
+  {% for cat in project_types %}
+    <a href="{% url 'projects:list' %}?type={{ cat.slug }}" class="filter-btn {% if current_type == cat.slug %}active{% endif %}">
+      {% if cat.icon %}{{ cat.icon }} {% endif %}{{ cat.name }}
     </a>
   {% endfor %}
 </div>
@@ -27,7 +27,7 @@
     {% for proj in projects %}
       <article class="monochrome-card">
         <div class="card-meta">
-          <span class="tag-badge">{{ proj.get_project_type_display }}</span>
+          <span class="tag-badge">{% if proj.project_type %}{% if proj.project_type.icon %}{{ proj.project_type.icon }} {% endif %}{{ proj.project_type.name }}{% else %}Software{% endif %}</span>
           <span>{{ proj.platform }}</span>
           <span>&bull;</span>
           <span>Version {{ proj.version }}</span>

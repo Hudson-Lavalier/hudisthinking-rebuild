@@ -16,7 +16,7 @@
   "@type": "SoftwareApplication",
   "name": "{{ project.title|escapejs }}",
   "operatingSystem": "{{ project.platform|escapejs }}",
-  "applicationCategory": "{{ project.get_project_type_display|escapejs }}",
+  "applicationCategory": "{% if project.project_type %}{{ project.project_type.name|escapejs }}{% else %}Software{% endif %}",
   "softwareVersion": "{{ project.version|escapejs }}",
   "description": "{% if project.meta_description %}{{ project.meta_description|escapejs }}{% else %}{{ project.tagline|escapejs }}{% endif %}",
   {% if project.download_file %}
@@ -38,7 +38,7 @@
 
   <header class="reader-header">
     <div class="card-meta">
-      <span class="tag-badge">{{ project.get_project_type_display }}</span>
+      <span class="tag-badge">{% if project.project_type %}{% if project.project_type.icon %}{{ project.project_type.icon }} {% endif %}{{ project.project_type.name }}{% else %}Software{% endif %}</span>
       <span>{{ project.platform }}</span>
       <span>&bull;</span>
       <span>Version {{ project.version }}</span>

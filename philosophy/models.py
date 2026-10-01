@@ -2,17 +2,33 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-class Argument(models.Model):
-    CATEGORY_CHOICES = [
-        ('argument', 'Philosophical Argument'),
-        ('essay', 'Essay'),
-        ('blog', 'Blog Post'),
-        ('fragment', 'Fragment / Note'),
-    ]
+class PhilosophyCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True, help_text="Category name (e.g. 'Arguments', 'Essays', 'Metaphysics')")
+    slug = models.SlugField(max_length=100, unique=True, help_text="URL-friendly identifier")
+    description = models.TextField(blank=True, help_text="Short description of this category")
+    icon = models.CharField(max_length=50, blank=True, help_text="Optional icon glyph, badge symbol, or emoji")
+    order = models.PositiveIntegerField(default=0, help_text="Sort order on archive tabs")
 
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Philosophy Category"
+        verbose_name_plural = "Philosophy Categories"
+
+    def __str__(self):
+        return f"{self.icon + ' ' if self.icon else ''}{self.name}"
+
+
+class Argument(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, help_text="URL-friendly identifier")
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='argument')
+    category = models.ForeignKey(
+        PhilosophyCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='arguments',
+        help_text="Choose or create categories under Philosophy Categories"
+    )
     thesis = models.CharField(
         max_length=350,
         blank=True,
@@ -21,14 +37,14 @@ class Argument(models.Model):
     content = models.TextField(help_text="Full text (Markdown supported).")
     published_date = models.DateField(default=timezone.now)
     is_published = models.BooleanField(default=True, db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     # SEO & Schema
     meta_description = models.CharField(
         max_length=160,
         blank=True,
-        help_text="Optional SEO description override. If left blank, uses thesis or first sentences."
+        help_text="Optional SEO description override. If left blank, uses thesis or title."
     )
     meta_keywords = models.CharField(
         max_length=255,
@@ -42,7 +58,8 @@ class Argument(models.Model):
         verbose_name_plural = "Philosophy Archive"
 
     def __str__(self):
-        return f"[{self.get_category_display()}] {self.title}"
+        cat_name = self.category.name if self.category else "Uncategorized"
+        return f"[{cat_name}] {self.title}"
 
     def get_absolute_url(self):
         return reverse('philosophy:detail', kwargs={'slug': self.slug})

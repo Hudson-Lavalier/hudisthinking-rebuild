@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load markdown_extras %}
+
+{% block title %}{{ page.title }} | {{ SITE_NAME }}{% endblock %}
+
+{% block meta_description %}{% if page.meta_description %}{{ page.meta_description }}{% else %}{{ page.title }} - {{ SITE_NAME }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{% if page.meta_description %}{{ page.meta_description }}{% else %}{{ page.title }}{% endif %}{% endblock %}
+
+{% block content %}
+<article class="reader-container">
+  <header class="reader-header">
+    <h1 class="reader-title">{{ page.title }}</h1>
+  </header>
+
+  <div class="markdown-prose">
+    {{ page.content|markdown }}
+  </div>
+
+  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between;">
+    <a href="{% url 'core:home' %}" class="btn-secondary">&larr; Return Home</a>
+    <a href="{% url 'admin:core_custompage_change' page.id %}" class="btn-secondary">[Edit in Admin]</a>
+  </div>
+</article>
+{% endblock %}
