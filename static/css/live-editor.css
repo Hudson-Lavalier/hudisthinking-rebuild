@@ -5,6 +5,10 @@
    ========================================================================== */
 
 /* Floating In-Situ Editor HUD Bar */
+body.hit-staff-active {
+  padding-bottom: 55px; /* Prevent fixed bar from covering footer links */
+}
+
 .hit-live-hud {
   position: fixed;
   bottom: 0;
@@ -22,6 +26,36 @@
   letter-spacing: 0.08em;
   color: #ffffff;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.85);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hit-live-hud.is-collapsed {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.hit-hud-min-bubble {
+  position: fixed;
+  bottom: 1rem;
+  right: 1.5rem;
+  z-index: 9999;
+  background-color: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+  transition: all 0.15s ease;
+}
+
+.hit-hud-min-bubble:hover {
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .hit-hud-left {
@@ -36,6 +70,13 @@
   color: #ffffff;
   border-right: 1px solid #333333;
   padding-right: 1.25rem;
+}
+
+.hit-hud-user {
+  font-size: 0.78rem;
+  color: #00ff66;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .hit-hud-status {

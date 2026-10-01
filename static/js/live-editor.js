@@ -208,6 +208,38 @@
       });
       mediaCloseBtn._hasLiveEditorListener = true;
     }
+
+    const collapseBtn = document.getElementById('hit-hud-collapse-btn');
+    const expandBtn = document.getElementById('hit-hud-expand-btn');
+
+    if (collapseBtn && !collapseBtn._hasLiveEditorListener) {
+      collapseBtn.addEventListener('click', () => {
+        hud.classList.add('is-collapsed');
+        document.body.classList.remove('hit-staff-active');
+        if (expandBtn) expandBtn.style.display = 'block';
+        localStorage.setItem('hit_hud_minimized', 'true');
+      });
+      collapseBtn._hasLiveEditorListener = true;
+    }
+
+    if (expandBtn && !expandBtn._hasLiveEditorListener) {
+      expandBtn.addEventListener('click', () => {
+        hud.classList.remove('is-collapsed');
+        document.body.classList.add('hit-staff-active');
+        expandBtn.style.display = 'none';
+        localStorage.removeItem('hit_hud_minimized');
+      });
+      expandBtn._hasLiveEditorListener = true;
+    }
+
+    // Check saved collapse state
+    if (localStorage.getItem('hit_hud_minimized') === 'true') {
+      hud.classList.add('is-collapsed');
+      document.body.classList.remove('hit-staff-active');
+      if (expandBtn) expandBtn.style.display = 'block';
+    } else {
+      document.body.classList.add('hit-staff-active');
+    }
   }
 
   async function loadMediaLibrary() {

@@ -138,14 +138,22 @@
   <div id="hit-live-editor-hud" class="hit-live-hud" data-no-swup>
     <div class="hit-hud-left">
       <span class="hit-hud-brand">HIT In-Situ Editor</span>
+      <span class="hit-hud-user">[USER: {{ request.user.username }}]</span>
       <span id="hit-hud-status-badge" class="hit-hud-status is-synced">[STANDBY]</span>
     </div>
     <div class="hit-hud-right">
+      <a href="{% url 'admin:index' %}" class="hit-hud-btn" data-no-swup title="Open Django Admin Portal">[DJANGO ADMIN]</a>
       <button type="button" id="hit-hud-media-btn" class="hit-hud-btn" title="Open Media Library">[MEDIA]</button>
       <button type="button" id="hit-hud-save-btn" class="hit-hud-btn btn-save-primary" style="display: none;">[SAVE CHANGES]</button>
       <button type="button" id="hit-hud-toggle-btn" class="hit-hud-btn">[EDIT MODE: OFF]</button>
+      <button type="button" id="hit-hud-collapse-btn" class="hit-hud-btn hit-hud-collapse-toggle" title="Collapse / Minimize Editor Bar">[MINIMIZE &darr;]</button>
     </div>
   </div>
+
+  <!-- Minimized Floating Toggle Bubble (When collapsed so it never covers the footer) -->
+  <button type="button" id="hit-hud-expand-btn" class="hit-hud-min-bubble" data-no-swup style="display: none;" title="Open In-Situ Live Editor">
+    [EDIT: {{ request.user.username }} &uarr;]
+  </button>
 
   <!-- In-Situ Media Drawer -->
   <div id="hit-media-drawer" class="hit-media-drawer" data-no-swup>
