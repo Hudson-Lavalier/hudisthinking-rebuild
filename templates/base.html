@@ -56,6 +56,15 @@
           data-speed="{{ site_config.wisp_speed|default:0.08 }}"></canvas>
   {% endif %}
 
+  <!-- Black Hole Vortex Event Horizon Transition Layer -->
+  <div id="vortex-portal" class="vortex-container" aria-hidden="true">
+    <div class="vortex-core"></div>
+    <div class="vortex-accretion-disk"></div>
+    <div class="vortex-ring vortex-ring-1"></div>
+    <div class="vortex-ring vortex-ring-2"></div>
+    <div class="vortex-ring vortex-ring-3"></div>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
       <a href="{% url 'core:home' %}" class="site-brand">

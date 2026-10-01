@@ -635,26 +635,133 @@ main.site-content {
 }
 
 /* ==========================================================================
-   Swup PJAX & Black Hole Void Singularity Transition (~220ms)
+   Swup PJAX & Black Hole Vortex Transition System
    ========================================================================== */
-.transition-void {
-  transition: opacity 0.22s cubic-bezier(0.7, 0, 0.84, 0),
-              transform 0.22s cubic-bezier(0.7, 0, 0.84, 0),
-              filter 0.22s ease;
-  transform-origin: center 25vh;
+
+/* Fixed Portal Overlay centered on screen (background wisps remain untouched underneath) */
+.vortex-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 480px;
+  height: 480px;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Gravitational Singularity Collapse on Exit */
+/* Deep Singularity Core */
+.vortex-core {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #000000;
+  box-shadow: 0 0 50px 20px rgba(255, 255, 255, 0.22),
+              inset 0 0 35px 15px rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 3;
+}
+
+/* Swirling Accretion Disk - Multi-stop Conic Vortex Arms */
+.vortex-accretion-disk {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(255, 255, 255, 0.45) 60deg,
+    rgba(255, 255, 255, 0.05) 120deg,
+    rgba(255, 255, 255, 0.5) 180deg,
+    rgba(255, 255, 255, 0.02) 240deg,
+    rgba(255, 255, 255, 0.6) 300deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  filter: blur(10px);
+  mask-image: radial-gradient(circle, transparent 28%, black 48%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle, transparent 28%, black 48%, transparent 72%);
+  animation: vortex-spiral-spin 1.8s linear infinite;
+  z-index: 2;
+}
+
+/* Concentric Gravitational Event Horizon Rings */
+.vortex-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vortex-ring-1 {
+  width: 240px;
+  height: 240px;
+  animation: vortex-counter-spin 3.2s linear infinite;
+}
+
+.vortex-ring-2 {
+  width: 340px;
+  height: 340px;
+  border-style: dotted;
+  border-color: rgba(255, 255, 255, 0.2);
+  animation: vortex-spiral-spin 4.5s linear infinite;
+}
+
+.vortex-ring-3 {
+  width: 440px;
+  height: 440px;
+  border-color: rgba(255, 255, 255, 0.12);
+  animation: vortex-counter-spin 6.5s linear infinite;
+}
+
+@keyframes vortex-spiral-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes vortex-counter-spin {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Active Vortex Surge during Swup Transition */
+html.is-animating .vortex-container,
+html.is-leaving .vortex-container {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+html.is-rendering .vortex-container {
+  opacity: 0.4;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Main Content Singularity Warping & Vortex Gravitational Swirl */
+.transition-void {
+  transition: opacity 0.38s cubic-bezier(0.65, 0, 0.35, 1),
+              transform 0.38s cubic-bezier(0.65, 0, 0.35, 1),
+              filter 0.38s ease;
+  transform-origin: center 30vh;
+}
+
+/* Gravitational Pull & Vortex Swirl into Singularity on Exit */
 html.is-animating .transition-void,
 html.is-leaving .transition-void {
   opacity: 0;
-  transform: scale(0.96) translateY(-8px);
-  filter: blur(4px);
+  transform: rotate(-18deg) scale(0.18) translateY(-40px);
+  filter: blur(8px) contrast(150%);
 }
 
-/* Event Horizon Bloom on Entry */
+/* New Page Expansion from Event Horizon on Entry */
 html.is-rendering .transition-void {
   opacity: 0;
-  transform: scale(1.02) translateY(8px);
-  filter: blur(4px);
+  transform: rotate(8deg) scale(0.85) translateY(30px);
+  filter: blur(5px);
 }
